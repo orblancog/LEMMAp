@@ -1,0 +1,32 @@
+From: Pantaleo RAIMONDI <pantaleo.raimondi@esrf.fr>
+To: Marica Biagini <marica.biagini@lnf.infn.it>, Susanna Guiducci <susanna.guiducci@lnf.infn.it>, Manuela Boscolo <manuela.boscolo@lnf.infn.it>, Mario Antonelli <mario.antonelli@lnf.infn.it>
+
+
+  Cari colleghi,
+
+in allegato cé'un lattice preliminare per il 45GeV ring.
+ho studiato svariate configurazioni e vi mando la migliore che ho sviluppato finora...
+Lo schema di correzione della chromaticita' e' tipo-ESRF (mi sembra il + promettente).
+
+Ovviamente si deve fare un sacco di lavoro:
+
+1) ottimizzazione della accettanza in energia
+    - wide tune scan
+   - sextupoles (families) optimization
+   - insertion of harmonic sextupoles (and octupoles...)
+   - etc...
+
+2) ottimizzazione dei parametri in funzione della targhetta:
+   - eloss/turn
+   - emittance
+   - RF (voltage and frquency)
+   - etc...
+
+3) tracking con la targetta (e senza)
+    - ottimizzazione targhetta
+    - ottimizzazione betas sulla targhetta
+    - etc...
+
+fatemi sapere,   saluti a tutti p
+
+

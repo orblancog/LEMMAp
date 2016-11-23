@@ -2,8 +2,8 @@
 ! Matching sections
 ! ------------------------------------------------------------------------------
 ! ARC cell
-USE ARCA;
-CELL;
+USE, sequence = ARCA;
+!CELL;
 !match, betx = 6.0, bety = 32, dx = 0.090
 vary, KQF1, step=.001;
 vary, KQF2, step=.001;

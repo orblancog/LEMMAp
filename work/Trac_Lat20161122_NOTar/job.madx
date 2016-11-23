@@ -1,0 +1,51 @@
+!! oblancog First twiss 20161123 
+option,echo,info,warn;
+E0 := 45.000;![GeV]
+BEAM, PARTICLE=positron, ENERGY=E0,NPART=1.9E10 , RADIATE= true;
+RF_ON := 1;
+SXT_ON := 1;
+call, file = "Pos_45GeV_Ring_8.mad.madx";
+USE, sequence=Low_Emit_RING;
+
+! arcs twiss parameters definition
+! changing these values requires to call the matching routine
+bxsf  =  76 ;     !
+bysf  =  35 ;     !
+aysf  =  0.0 ;   !  to minimize vertical detuning with amplitude
+dxsf  =  0.500 ;   !
+bymid = 51.0 ;      !
+bxmid = 3.0  ;     !
+dxmid = 0.056 ;   !
+bycel = 29.0 ;      !
+bxcel = 5.5  ;     !
+dxcel = 0.094-0.006 ;   !
+muxcel = 2.771875+0.0/32 ;   !2.3875    ! 2.3625    !
+muycel = 1.275+0.0/32 ;   !0.825     !0.8375    ! 0.8625    !
+rm_sxt_12 = 0.0 ; ! to change detuning with amplitude
+rm_sxt_34 = 2.2;
+KSF2 =   1.95*sxt_on;
+KS1A =  -2.17*sxt_on;
+KS1B =  -1.56*sxt_on;
+KS1D =  -1.56*sxt_on;
+KS1E =  -2.17*sxt_on;
+KOF1 = -38.5;
+KDF1 = 150.0;
+KDD1 =   0.0;
+KQD9 =  -3.502004E-01;
+KQF8 =   2.355622E-01;
+KQD7 =  -3.659796E-01;
+KQF6 =   2.317365E-01;
+KQD5 =  -2.041680E-01;
+KQF4 =   1.784162E-01;
+KQD3 =  -2.234357E-01;
+KQD2 =  -3.917201E-01;
+KQD1 =  -3.801510E-01;
+KQF2 =   2.048242E-01;
+KQF1 =   1.977323E-01;
+
+! matching routines
+!call,file="Pos_45GeV_Match_8.mad.madx";
+
+savebeta,label=HER,place=#e;
+TWISS, chrom, SAVE, file;
+!EMIT;

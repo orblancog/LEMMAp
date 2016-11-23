@@ -1,11 +1,11 @@
 !6.039 GeV Low Emit Ring
-ASSIGN, PRINT="Low_Emit.print";
-ASSIGN, ECHO="Low_Emit.echo";
+!ASSIGN, PRINT="Low_Emit.print";
+!ASSIGN, ECHO="Low_Emit.echo";
 OPTION, -ECHO, !-warn
 ! ==============================================================================
 ! load ring files
 ! ------------------------------------------------------------------------------
-call,"Pos_45GeV_Ring_8.mad";
+!call,"Pos_45GeV_Ring_8.mad";
 ! ==============================================================================
 ! some twiss parameters definitions
 ! ------------------------------------------------------------------------------

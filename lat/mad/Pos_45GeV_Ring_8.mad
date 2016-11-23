@@ -1,0 +1,230 @@
+! 6.039 GeV Ring
+
+!----------------------------------------------------
+! RF Cavities
+!----------------------------------------------------
+
+RF_ON   := 1
+RFVOLT  := 12.0*RF_ON
+RFc     : RFCAVITY, L=L_RFC, VOLT=RFVOLT, LAG=0.5, HARMON=10510  !500MHz,  !lag=0.46 with rad on
+
+L_RFC    := 5.4 
+
+! Dipoles
+
+DL1A_1: SBEND,L=4.0, ANGLE = 0.00230, &
+ K1 = 0.0000000000, E1= -0.0, E2= 0.0 ;
+
+DL1A_2: SBEND,L=4.0, ANGLE = 0.00300, &
+ K1 = 0.0000000000, E1= -0.0, E2= 0.0 ;
+
+DL1A_3: SBEND,L=4.0, ANGLE = 0.00380, &
+ K1 = 0.0000000000, E1= -0.0, E2= 0.0 ;
+
+DL1A_4: SBEND,L=4.0, ANGLE = 0.00500,&
+ K1 = 0.0000000000, E1= 0.0, E2= 0.0 ;
+
+DL1A_5: SBEND,L=4.0, ANGLE = 0.00700, &
+ K1 = 0.0000000000, E1= 0.0, E2= -0.0 ;
+
+DL1E_1: SBEND,L=4.0, ANGLE = 0.00230, &
+ K1 = 0.0000000000, E1= 0.0, E2= -0.0 ;
+
+DL1E_2: SBEND,L=4.0, ANGLE = 0.00300, &
+ K1 = 0.0000000000, E1= 0.0, E2= -0.0 ;
+
+DL1E_3: SBEND,L=4.0, ANGLE = 0.00380, &
+ K1 = 0.0000000000, E1= 0.0, E2= -0.0 ;
+
+DL1E_4: SBEND,L=4.0, ANGLE = 0.00500, &
+ K1 = 0.0000000000, E1= 0.0, E2= 0.0 ;
+
+DL1E_5: SBEND,L=4.0, ANGLE = 0.00700, &
+ K1 = 0.0000000000, E1= -0.0, E2= 0.0 ;
+
+DL2B_1: SBEND,L=4.0, ANGLE = 0.00230, &
+ K1 = 0.0000000000, E1= 0.0, E2= -0.0 ;
+
+DL2B_2: SBEND,L=4.0, ANGLE = 0.00300, &
+ K1 = 0.0000000000, E1= 0.0, E2= -0.0 ;
+
+DL2B_3: SBEND,L=4.0, ANGLE = 0.00380, &
+ K1 = 0.0000000000, E1= 0.0, E2= -0.0 ;
+
+DL2B_4: SBEND,L=4.0, ANGLE = 0.00500, &
+ K1 = 0.0000000000, E1= 0.0, E2= 0.0 ;
+
+DL2B_5: SBEND,L=4.0, ANGLE = 0.00700, &
+ K1 = 0.0000000000, E1= -0.0, E2= 0.0 ;
+
+DL2D_1: SBEND,L=4.0, ANGLE = 0.00230, &
+ K1 = 0.0000000000, E1= -0.0, E2= 0.0 ;
+
+DL2D_2: SBEND,L=4.0, ANGLE = 0.00300, &
+ K1 = 0.0000000000, E1= -0.0, E2= 0.0 ;
+
+DL2D_3: SBEND,L=4.0, ANGLE = 0.00380, &
+ K1 = 0.0000000000, E1= -0.0, E2= 0.0 ;
+
+DL2D_4: SBEND,L=4.0, ANGLE = 0.00500, &
+ K1 = 0.0000000000, E1= 0.0, E2= 0.0 ;
+
+DL2D_5: SBEND,L=4.0, ANGLE = 0.00700, &
+ K1 = 0.0000000000, E1= 0.0, E2= -0.0 ;
+
+DQ1A_1: SBEND,L=6.0, ANGLE = 0.009329128, &
+ K1 = 0.0, E1= 0.0, E2= 0.0 ;
+
+DQ1A_2: SBEND,L=6.0, ANGLE = 0.009329128, &
+ K1 = 0.0, E1= -0.0, E2= 0.0 ;
+
+DQ1B_1: SBEND,L=6.0, ANGLE = 0.009329128, &
+ K1 = 0.0, E1= 0.0, E2= 0.0 ;
+
+DQ1B_2: SBEND,L=6.0, ANGLE = 0.009329128, &
+ K1 = 0.0, E1= -0.0, E2= 0.0 ;
+
+DQ2C_1: SBEND,L=6.0, ANGLE = 0.009329128, &
+ K1 = 0.0, E1= 0.0, E2= 0.0 ;
+
+DQ2C_2: SBEND,L=6.0, ANGLE = 0.009329128, &
+ K1 = 0.0, E1= -0.0, E2= 0.0 ;
+
+DQ2E_1: SBEND,L=6.0, ANGLE = 0.009329128, &
+ K1 = 0.0, E1= 0.0, E2= 0.0 ;
+
+DQ2A_2: SBEND,L=6.0, ANGLE = 0.009329128, &
+ K1 = 0.0, E1= -0.0, E2= 0.0 ;
+
+DQ1D_1: SBEND,L=6.0, ANGLE = 0.009329128, &
+ K1 = 0.0, E1= -0.0, E2= 0.0 ;
+
+DQ1D_2: SBEND,L=6.0, ANGLE = 0.009329128, &
+ K1 = 0.0, E1= 0.0, E2= 0.0 ;
+
+DQ1E_1: SBEND,L=6.0, ANGLE = 0.009329128, &
+ K1 = 0.0, E1= -0.0, E2= 0.0 ;
+
+DQ1E_2: SBEND,L=6.0, ANGLE = 0.009329128, &
+ K1 = 0.0, E1= 0.0, E2= 0.0 ;
+
+
+ ! quads
+
+ LQ20:   CONSTANT = 0.400 ! length 20 cm Quad
+ LQ36:   CONSTANT = 0.720 ! length 33 cm Quad
+ LQ50:   CONSTANT = 1.000 ! length 50 cm Quad
+
+ ! ID matching quads
+ QF1A  : QUADRUPO, L=  LQ50, K1=KQF1! ,FRGF=.TRUE.
+ QF1E  : QUADRUPO, L=  LQ50, K1=KQF1! ,FRGF=.TRUE. 
+ 
+ QF2A  : QUADRUPO, L=  LQ36, K1 = KQF2;
+ QF2E  : QUADRUPO, L=  LQ36, K1 = KQF2;
+
+ QD1A  : QUADRUPO, L=  LQ20/2, K1=KQD1! ,FRGF=.TRUE.
+ QD1E  : QUADRUPO, L=  LQ20/2, K1=KQD1! ,FRGF=.TRUE.
+
+ QD2A  : QUADRUPO, L=  LQ20, K1=KQD2! ,FRGF=.TRUE.
+ QD2E  : QUADRUPO, L=  LQ20, K1=KQD2! ,FRGF=.TRUE.
+
+ QD3A  : QUADRUPO, L=  LQ20, K1=KQD3! ,FRGF=.TRUE.
+ QD3E  : QUADRUPO, L=  LQ20, K1=KQD3! ,FRGF=.TRUE.
+
+ ! 3pi Cell Quads
+ QF4A  : QUADRUPO, L=  LQ20, K1=KQF4! ,FRGF=.TRUE.
+ QF4B  : QUADRUPO, L=  LQ20, K1=KQF4! ,FRGF=.TRUE.
+ QF4D  : QUADRUPO, L=  LQ20, K1=KQF4! ,FRGF=.TRUE.
+ QF4E  : QUADRUPO, L=  LQ20, K1=KQF4! ,FRGF=.TRUE.
+ 
+ QD7B  : QUADRUPO, L=  LQ20, K1=KQD7! ,FRGF=.TRUE.
+ QD7D  : QUADRUPO, L=  LQ20, K1=KQD7! ,FRGF=.TRUE.
+
+ QD9C  : QUADRUPO, L=  LQ20/2, K1=KQD9! ,FRGF=.TRUE.
+
+ QD5B  : QUADRUPO, L=  LQ20, K1=KQD5! ,FRGF=.TRUE.
+ QD5D  : QUADRUPO, L=  LQ20, K1=KQD5! ,FRGF=.TRUE.
+
+ QF6B  : QUADRUPO, L=  LQ36, K1=KQF6! ,FRGF=.TRUE.
+ QF6D  : QUADRUPO, L=  LQ36, K1=KQF6! ,FRGF=.TRUE.
+
+ QF8B  : QUADRUPO, L=  LQ50, K1=KQF8! ,FRGF=.TRUE.
+ QF8D  : QUADRUPO, L=  LQ50, K1=KQF8! ,FRGF=.TRUE.
+
+! Sextupoles
+ 
+ LS20 = 0.40          ! Sextupole lenght
+
+SF2A : SEXTUPOLE, L =LS20/2, K2 = KSF2
+SF2E : SEXTUPOLE, L =LS20/2, K2 = KSF2
+SD1A : SEXTUPOLE, L =LS20, K2 = KS1A
+SD1B : SEXTUPOLE, L =LS20, K2 = KS1B
+SD1D : SEXTUPOLE, L =LS20, K2 = KS1D
+SD1E : SEXTUPOLE, L =LS20, K2 = KS1E
+
+OF1B: OCTUPOLE, L = 0.15, K3 = KOF1   
+OF1D: OCTUPOLE, L = 0.15, K3 = KOF1     
+
+!dec6: multipole, K5L = 1.0e6*0 ! Spurious dodecapole
+
+DF1B: MULTIPOLE, K4L = KDF1   
+DF1D: MULTIPOLE, K4L = KDF1     
+DD1B: MULTIPOLE, K4L = KDD1   
+DD1D: MULTIPOLE, K4L = KDD1     
+
+ DR40  : DRIFT, L = L_RFC+0.3
+ DR08  : DRIFT, L = 0.15
+
+!-----------------------------------------
+! arc cells              
+!-----------------------------------------
+ 
+ ARCA: LINE=(QD1A,DR08,DQ2A_2,DR08, QF1A,&
+             DR08, DQ1A_1,DR08,QD2A,DR08, DQ1A_2, &
+             DR08, QF2A, DR08, &
+             DL1A_5 ,DL1A_4 ,DL1A_3 ,DL1A_2 ,DL1A_1,&
+             DR08, QD3A, DR08, &
+             SD1A, DR08,DD1B,DR08,RFc,DR08,DF1B,DR08, &
+             QF4A,& 
+             DR08, 2*SF2A, DR08, &
+             QF4B,&
+             DR08, OF1B,&
+             DR40, SD1B,& 
+             DR08, QD5B, DR08, &
+             DL2B_1, DL2B_2, DL2B_3, DL2B_4, DL2B_5,&
+             DR08, QF6B,DR08, &
+             DQ1B_1,DR08,QD7B,DR08, DQ1B_2,&
+             DR08, QF8B,DR08, &
+             DQ2C_1,DR08,2*QD9C,DR08 DQ2C_2, &
+             DR08, QF8D,DR08,&
+             DQ1D_2, DR08,QD7D,DR08, DQ1D_1, &
+             DR08, QF6D, DR08, &
+             DL2D_5, DL2D_4 ,DL2D_3 ,DL2D_2, DL2D_1,&
+             DR08, QD5D, DR08,&
+             SD1D, DR40,& 
+             OF1D, DR08,&
+             QF4D, &
+             DR08, 2*SF2E, DR08, &
+             QF4E,DR08,DF1D, &
+             DR08,RFc,DR08,DD1D,DR08, SD1E, &
+             DR08, QD3E, DR08,&
+             DL1E_1, DL1E_2 ,DL1E_3 ,DL1E_4 ,DL1E_5,&
+             DR08, QF2E, DR08, &
+             DQ1E_1,DR08,QD2E,DR08, DQ1E_2, &
+             DR08,& 
+             QF1E, DR08,DQ2E_1,DR08,QD1E)
+
+!----------------------------------------------------
+! ring without injection
+!----------------------------------------------------
+
+Low_Emit_Ring : LINE = ( ARCA, ARCA, ARCA, ARCA, &
+                         ARCA, ARCA, ARCA, ARCA, &
+                         ARCA, ARCA, ARCA, ARCA, &
+                         ARCA, ARCA, ARCA, ARCA, &
+                         ARCA, ARCA, ARCA, ARCA, &
+                         ARCA, ARCA, ARCA, ARCA, &
+                         ARCA, ARCA, ARCA, ARCA, &
+                         ARCA, ARCA, ARCA, ARCA )
+
+RETURN

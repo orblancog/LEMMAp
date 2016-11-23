@@ -1,0 +1,6 @@
+  Reading file: ../mad/FringeTrack.mad
+  ...initial syntax translation...
+  ...Checking for non-standard elements...
+  Output file: ../mad/FringeTrack.mad.madx created.
+  ALL done. Adios !
+./mad2madx/mad2madx ../mad/FringeTrack.mad >  notes

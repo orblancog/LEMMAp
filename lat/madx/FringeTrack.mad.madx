@@ -1,0 +1,107 @@
+! ring without the final focus insertion
+USE, Low_Emit_Ring;
+RF_ON  := 1;
+SXT_ON=1;
+TWISS, CHROM, SAVE;
+! plot the bandwidth (+-1.0%)
+de_t = 0.03;
+DP := -de_t;
+SXT_ON=1;
+OCT_ON=1;
+RF_ON=0;
+BEAM, PARTICLE=ELECTRON, ENERGY=E0,NPART=1.9E10,RADIATE=.f.;
+savebeta,label=HER,place=#e;
+TWISS, CHROM, SAVE;
+emitx=5.00E-9/4  !emit
+emity= emitx/2.;
+sigx: =sqrt(emitx*HER[betx]);
+sigxp: =sqrt(emitx/HER[betx]);
+sigy: =sqrt(emity*HER[bety]);
+sigyp: =sqrt(emity/HER[bety]);
+x_dep: =  HER[dx]*de_t+HER[ddx]*de_t*de_t;
+x_dem: = -HER[dx]*de_t+HER[ddx]*de_t*de_t;
+sxmax:  = 120*sigx;
+sxpmax: = 120*sigxp;
+symax:  = 120*sigy;
+sypmax: = 120*sigyp;
+track;
+START, x=20*sigx,y=0*sigy,deltap=0.0,px=0.,py=0.,t=0.0;
+START, x=40*sigx,y=0*sigy,deltap=-0.00000,px=0.,py=0.,t=0.0;
+START, x=60*sigx,y=0*sigy,deltap= 0.0000,px=0.,py=0.,t=0.0;
+START, x=80*sigx,y=0*sigy,deltap= 0.00000,px=0.,py=0.,t=0.0;
+START, x=100*sigx,y=0*sigy,deltap=-0.00000,px=0.,py=0.,t=0.0;
+run,method=lie4,table=trac,turns=30,fprint=0;
+PLOT, table=trac,haxis=x,vaxis=px,multiple,symbol=2,hmin=-sxmax,hmax=sxmax,vmin=
+-sxpmax,vmax=sxpmax,TITLE="Low Emit Ring",FILE="Low_Emit";
+PLOT, table=trac,haxis=t,vaxis=pt,multiple,symbol=2,TITLE="Low Emit
+Ring",FILE="Low_Emit";
+endtrack;
+!stop
+!comment
+track;
+START, x=20*sigx,y=0*sigy,deltap=0.02,px=0.,py=0.,t=0.0;
+START, x=40*sigx,y=0*sigy,deltap=0.02,px=0.,py=0.,t=0.0;
+START, x=60*sigx,y=0*sigy,deltap=0.02,px=0.,py=0.,t=0.0;
+run,method=lie4,table=trac,turns=30,fprint=0;
+PLOT, table=trac,haxis=x,vaxis=px,multiple,symbol=2,hmin=-sxmax,hmax=sxmax,vmin=
+-sxpmax,vmax=sxpmax,TITLE="Low Emit Ring dE/E=2pc",FILE="Low_Emit";
+endtrack;
+track;
+START, x=20*sigx,y=0*sigy,deltap=-0.02,px=0.,py=0.,t=0.0;
+START, x=60*sigx,y=0*sigy,deltap=-0.02,px=0.,py=0.,t=0.0;
+START, x=80*sigx,y=0*sigy,deltap=-0.02,px=0.,py=0.,t=0.0;
+run,method=lie4,table=trac,turns=30,fprint=0;
+PLOT, table=trac,haxis=x,vaxis=px,multiple,symbol=2,hmin=-sxmax,hmax=sxmax,vmin=
+-sxpmax,vmax=sxpmax,TITLE="Low Emit Ring dE/E=-2pc",FILE="Low_Emit";
+endtrack;
+!endcomment
+track;
+START, x= 20*sigx,y=0.001,deltap=0.0,px=0.,py=0.,t=0.0;
+START, x= 60*sigx,y=0.001,deltap=0.0,px=0.,py=0.,t=0.0;
+START, x= 80*sigx,y=0.001,deltap=0.0,px=0.,py=0.,t=0.0;
+run,method=lie4,table=trac,turns=30,fprint=0;
+PLOT, table=trac,haxis=x,vaxis=px,multiple,symbol=2,hmin=-sxmax,hmax=sxmax,vmin=
+-sxpmax,vmax=sxpmax,TITLE="Low Emit Ring",FILE="Low_Emit";
+endtrack;
+!stop
+track;
+START, x=0.0,y=20*sigy,deltap=0.0,px=0.,py=0.,t=0.;
+START, x=0.0,y=40*sigy,deltap=0.0,px=0.,py=0.,t=0.;
+START, x=0.0,y=60*sigy,deltap=0.0,px=0.,py=0.,t=0.;
+START, x=0.0,y=80*sigy,deltap=0.0,px=0.,py=0.,t=0.;
+START, x=0.0,y=100*sigy,deltap=0.0,px=0.,py=0.,t=0.;
+run,method=lie4,table=trac,turns=30,fprint=0;
+PLOT, table=trac,haxis=y,vaxis=py,multiple,symbol=2,hmin=-symax,hmax=symax,vmin=
+-sypmax,vmax=sypmax,TITLE="Low Emit Ring",FILE="Low_Emit";
+endtrack;
+track;
+START, x=4*sigx,y=20*sigy,deltap=0.0,px=0.,py=0.,t=0.;
+START, x=8*sigx,y=40*sigy,deltap=0.0,px=0.,py=0.,t=0.;
+START, x=12*sigx,y=60*sigy,deltap=0.0,px=0.,py=0.,t=0.;
+START, x=16*sigx,y=80*sigy,deltap=0.0,px=0.,py=0.,t=0.;
+START, x=20*sigx,y=100*sigy,deltap=0.0,px=0.,py=0.,t=0.;
+run,method=lie4,table=trac,turns=30,fprint=0;
+PLOT, table=trac,haxis=y,vaxis=py,multiple,symbol=2,hmin=-symax,hmax=symax,vmin=
+-sypmax,vmax=sypmax,TITLE="Low Emit Ring",FILE="Low_Emit";
+endtrack;
+! plot the chromaticity
+Qx := 0;
+Qy := 0;
+DP := -de_t;
+!comment
+SAVEBETA, TWSSend, #e;
+DO, TIMES=21;
+TWISS, DELTAP=DP;
+SET, Qx, TWSSend[mux]-88.0 !
+SET, Qy, TWSSend[muy]-40.0 !
+PUSH, DP, Qx, Qy;
+SET, DP, DP+de_t/10;
+ENDDO;
+ENDPUSH, SAVE="temp.dat";
+PLOT, TABLE=SPECIAL, HAXIS=DP, VAXIS1=Qx, VAXIS2=Qy,
+STYLE=100,VMIN=0.50,0.60,VMAX=0.90,1.00,TITLE="Low Emit Ring",FILE="Low_Emit";
+!    PLOT, TABLE=SPECIAL, HAXIS=DP, VAXIS1=Qx, VAXIS2=Qy, STYLE=100,&
+!       VMIN=0.00,0.10,VMAX=0.40,0.50,&
+!       TITLE="Low Emit Ring",FILE="Low_Emit"
+!endcomment
+stop;

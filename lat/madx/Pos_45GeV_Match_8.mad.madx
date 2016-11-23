@@ -1,0 +1,37 @@
+! ==============================================================================
+! Matching sections
+! ------------------------------------------------------------------------------
+! ARC cell
+USE ARCA;
+CELL;
+!match, betx = 6.0, bety = 32, dx = 0.090
+vary, KQF1, step=.001;
+vary, KQF2, step=.001;
+vary, KQD1, step=.001;
+vary, KQD2, step=.001;
+vary, KQD3, step=.001;
+vary, KQF4, step=.001;
+vary, KQD5, step=.001;
+vary, KQF6, step=.001;
+vary, KQD7, step=.001;
+vary, KQF8, step=.001;
+vary, KQD9, step=.001;
+RMATRIX, SF2A[1]/SF2E[1], RM(1,2)= rm_sxt_12, RM(3,4)= rm_sxt_34;
+constrai, SF2A[1], betx > bxsf, bety = bysf, alfy = aysf, dx > dxsf;
+constrai, QD9C[1], bety = bymid, betx > bxmid, dx = dxmid;
+constrai, #e,betx = bxcel, bety = bycel, dx < dxcel, mux = muxcel, muy = muycel;
+lmdif, tolerance = 1e-10, calls = 2000;
+!comment
+simplex, tolerance = 1e-10, calls = 5000;
+migrad, tolerance = 1e-10, calls = 5000;
+lmdif, tolerance = 1e-10, calls = 5000;
+simplex, tolerance = 1e-10, calls = 5000;
+migrad, tolerance = 1e-10, calls = 5000;
+!endcomment
+endmatch;
+savebeta,label=IDtw,place=#e;
+TWISS, CHROM, SAVE;
+bxcel=IDtw[betx];
+bycel=IDtw[bety];
+dxcel=IDtw[dx];
+return;

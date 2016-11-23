@@ -4,8 +4,8 @@ This is the README file.
 These folders contain the madx tracking work and results of the e+ ring  
 for the Muon Collider Project LEMMA [1].  
 
-*Update : Linear lattice (betasmax,tunes, radintegrals, length) seem OK
-          Multipoles might be wrong. Check ongoing ...* 
+*Update : Linear lattice (betasmax,tunes, radintegrals, length) seem OK after translation from mad*
+*         Multipoles might be wrong. Check ongoing ... * 
  
 ## Folder structure
 `LEMMAp`  

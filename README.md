@@ -1,11 +1,11 @@
 # LEMMA e+  
 
 This is the README file.  
-Thes folders contains the madx tracking work and results of the e+ ring  
+These folders contain the madx tracking work and results of the e+ ring  
 for the Muon Collider Project LEMMA [1].  
  
 ## Folder structure
-`LEMMAe+`  
+`LEMMAp`  
 -`README.md` : Description and new info  
 -`lat` : Lattice version of the e+ ring  
 -`targ` : Target versions for the muon production  

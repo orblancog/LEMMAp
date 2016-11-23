@@ -165,7 +165,7 @@ SD1E : SEXTUPOLE, L =LS20, K2 = KS1E
 OF1B: OCTUPOLE, L = 0.15, K3 = KOF1   
 OF1D: OCTUPOLE, L = 0.15, K3 = KOF1     
 
-!dec6: multipole, K5L = 1.0e6*0
+!dec6: multipole, K5L = 1.0e6*0 ! Spurious dodecapole
 
 DF1B: MULTIPOLE, K4L = KDF1   
 DF1D: MULTIPOLE, K4L = KDF1     

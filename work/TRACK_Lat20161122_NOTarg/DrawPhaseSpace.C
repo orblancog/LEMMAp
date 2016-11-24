@@ -216,21 +216,21 @@ int DrawPhaseSpace (const char * k) {//k is the flag name
   trackxpx->Draw("colz");
   trackxpx->SetTitle("H. Phase Space");
   trackxpx->GetXaxis()->SetTitle("x [mm]");
-  trackxpx->GetYaxis()->SetTitle("px [mrad]");
+  trackxpx->GetYaxis()->SetTitle("px/p0 [mrad]");
   trackxpx->GetXaxis()->CenterTitle();
   trackxpx->GetYaxis()->CenterTitle();
   c1->cd(2);
   trackypy->Draw("colz");
   trackypy->SetTitle("V. Phase Space");
   trackypy->GetXaxis()->SetTitle("y [mm]");
-  trackypy->GetYaxis()->SetTitle("py [mrad]");
+  trackypy->GetYaxis()->SetTitle("py/p0 [mrad]");
   trackypy->GetXaxis()->CenterTitle();
   trackypy->GetYaxis()->CenterTitle();
   c1->cd(3);
   tracksd->Draw("colz");
   tracksd->SetTitle("L. Phase Space");
   tracksd->GetXaxis()->SetTitle("t [mm]");
-  tracksd->GetYaxis()->SetTitle("e. spread [1e-3]");
+  tracksd->GetYaxis()->SetTitle("e.spread/(p0*clight) [1e-3]");
   tracksd->GetXaxis()->CenterTitle();
   tracksd->GetYaxis()->CenterTitle();
 

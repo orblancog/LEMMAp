@@ -211,7 +211,7 @@ int GenerateInrays (const char * k, int N) {
     ups = bunchlrnd->Gaus(0,sigmas0);
     if (Edistr){
       upd = Espreadrnd->Gaus(0,sigmad0);
-      tgausvalue = upd*upd/(sigmad0*sigmad0)+ups*ups/(sigmas0*sigmas0);
+      tgausvalue = upd*upd/(sigmad0*sigmad0)/(TMath::TwoPi()/2) + ups*ups/(sigmas0*sigmas0)/(TMath::TwoPi()/2);
     }else{
       upd = Espreadrnd->Uniform(-0.5*sigmad0,0.5*sigmad0);//\Delta E/(Pc) = 1/\beta_r * \Delta E/E
       tgausvalue = ups*ups/(sigmas0*sigmas0);

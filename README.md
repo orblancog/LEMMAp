@@ -4,7 +4,7 @@ This is the README file.
 These folders contain the madx tracking work and results of the e+ ring  
 for the Muon Collider Project LEMMA [1].  
 
-*Update : Upright multipoles (no skew multipoles are used).  Beta functions check ongoing ... * 
+* Update : Upright multipoles OK (no skew multipoles are used).  Beta functions check ongoing ... * 
  
 ## Folder structure
 `LEMMAp`  

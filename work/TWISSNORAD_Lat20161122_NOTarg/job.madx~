@@ -1,0 +1,53 @@
+RF_ON := 0;
+SXT_ON := 1;
+! ==============================================================================
+! twiss plots along the ring
+! ------------------------------------------------------------------------------
+hinv: string,"((1+(alfx*alfx))/betx)*dx*dx+2*alfx*dx*dpx+betx*dpx*dpx";
+! Arc cells
+USE ARCA;
+TWISS, SAVE !,betx = 3,bety = 20,dx = .02
+PLOT, TABLE=TWISS, HAXIS=S, VAXIS1=BETX,BETY, VAXIS2=DX, STYLE=1, COLOUR=100,
+SPLINE=.T.,title="ARC Cells",FILE="Low_Emit";
+plot, table=twiss,haxis=s, vaxis= hinv, style=100, title="ARC
+Cells",FILE="Low_Emit";
+!stop
+! Ring Lattice
+USE, Low_Emit_RING;
+! print,full
+RF_ON  := 0;
+survey;
+SXT_ON=0;
+TWISS, chrom, SAVE;
+PLOT, TABLE=TWISS, HAXIS=S, VAXIS1=BETX,BETY, VAXIS2=DX,DY,
+STYLE=1,COLOUR=100,SPLINE=.T.,TITLE="Low Emit Ring",FILE="Low_Emit";
+PLOT, TABLE=TWISS, HAXIS=S, VAXIS1=WX,WY, VAXIS2=DDX,
+STYLE=1,COLOUR=100,SPLINE=.T., TITLE="Low Emit Ring, Sextupoles
+OFF",FILE="Low_Emit";
+SXT_ON=1;
+TWISS, chrom, SAVE;
+PLOT, TABLE=TWISS, HAXIS=S, VAXIS1=WX,WY,
+VAXIS2=DDX,STYLE=1,COLOUR=100,SPLINE=.T.,TITLE="Low Emit Ring, Sextupoles
+ON",FILE="Low_Emit";
+PLOT, TABLE=TWISS, HAXIS=S, VAXIS=WX, STYLE=1,COLOUR=100,SPLINE=.T.,TITLE="Low
+Emit Ring, Sextupoles ON",FILE="Low_Emit";
+PLOT, TABLE=TWISS, HAXIS=S, VAXIS=WY, STYLE=1,COLOUR=100,SPLINE=.T.,TITLE="Low
+Emit Ring, Sextupoles ON",FILE="Low_Emit";
+PLOT, TABLE=TWISS, HAXIS=S, VAXIS=DDX,STYLE=1,COLOUR=100,SPLINE=.T.,TITLE="Low
+Emit Ring, Sextupoles ON",FILE="Low_Emit";
+! Output Machine Parameters
+comment;
+USE, Low_Emit_RING;
+select error,low_emit_ring;
+EALIGN,qff, DX= 0.01;
+EALIGN,qdd, DX=-0.01;
+eprint, full;
+endcomment;
+SXT_ON=1;
+RF_ON=1;
+BEAM, PARTICLE=ELECTRON, ENERGY=E0,NPART=1.9E10 , RADIATE;
+savebeta,label=HER,place=#e;
+TWISS, chrom, SAVE;
+BMPM,kappa=0.01!,TOUSCH
+!  RF_ON  := 0
+EMIT;

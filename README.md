@@ -14,6 +14,11 @@ _Update : Twiss OK. Moving to track_
 -`work` : la roba  
 -`toshow` : stuff  
 
+## Software Requirements
+* [MAD-X v5.X.X](http://madx.web.cern.ch/madx/)
+* [awk](https://en.wikipedia.org/wiki/AWK)
+* [ROOT](https://root.cern.ch/)
+
 ## Authors
 collamati,  
 blanco, oscar.blancogarcia@lnf.infn.it  

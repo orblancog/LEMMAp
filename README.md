@@ -4,7 +4,7 @@ This is the README file.
 These folders contain the madx tracking work and results of the e+ ring  
 for the Muon Collider Project LEMMA [1].  
 
-_Update : Twiss OK. Moving to track_
+_Update : First track. Checking best ptc track parameters_
  
 ## Folder structure
 `LEMMAp`  

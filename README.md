@@ -5,6 +5,7 @@ These folders contain the madx tracking work and results of the e+ ring
 for the Muon Collider Project LEMMA [1].  
 
 _Update : First track. Checking best ptc track parameters_
+         _Running one turn with Dummy Target_
  
 ## Folder structure
 `LEMMAp`  

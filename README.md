@@ -16,9 +16,11 @@ _Update : Checking best ptc track parameters when radiation on_
 -`toshow` : stuff  
 
 ## Software Requirements
+* [Bash](https://it.wikipedia.org/wiki/Bash)
 * [MAD-X v5.X.X](http://madx.web.cern.ch/madx/)
 * [awk](https://en.wikipedia.org/wiki/AWK)
 * [ROOT](https://root.cern.ch/)
+
 
 ## Authors
 collamati,  
@@ -29,5 +31,5 @@ blanco, oscar.blancogarcia@lnf.infn.it
 
 ## References   
 [1] LEMMA link : [Very Low Emmitance Muon Beam using positron beam on target. M.~ANTONELLI.~(LNF/INFN)](https://agenda.infn.it/getFile.py/access?contribId=15&sessionId=0&resId=0&materialId=slides&confId=12202)  
-
+[2] Tracking and Target : [Initial](https://agenda.infn.it/conferenceDisplay.py?confId=12427)
 

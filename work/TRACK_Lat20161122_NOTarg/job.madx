@@ -14,15 +14,22 @@ espread:= 1e-3;
 beam, PARTICLE=positron, ENERGY=E0,
       ex=emitx, ey=emity, et=blength*espread,
       sigt=blength, sige=espread, kbunch=nbunch,
-      NPART=nparpb, bcurrent=bcur, RADIATE=true;
-
-! The cavity parameters
-RF_ON  := 1;
-SXT_ON := 1;
+      NPART=nparpb, bcurrent=bcur, RADIATE=false;
 
 ! The ring 
 call, file = "Pos_45GeV_Ring_8.mad.madx";
 use, sequence=Low_Emit_RING;
+
+! The cavity parameters
+RF_ON  := 1;
+SXT_ON := 1;
+!RFc->LAG := -twopi/4;
+!show, rfc;
+!stop;
+
+! Beam pipe
+Rpipe = 30e-3;![m]
+AngMax = 1.0; !maximum angle 1[rad]=
 
 
 ! arcs twiss parameters definition (from last match in mad)
@@ -78,7 +85,7 @@ system, "ps2pdf madx.ps";
 ! End of initial twiss plots and comparison
 
 ! Here I get the beam and twiss params for the part. generation
-system, "rm -f betaSTART.txt beam0.txt";
+system, "rm -f betaSTART.txt betaEND.txt beam0.txt";
 assign, echo="betaSTART.txt";
 show, betaSTART;
 assign, echo="betaEND.txt";
@@ -97,7 +104,9 @@ system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
 !set parameters
 system, "rm -f track*";
 ptc_create_universe;
-ptc_create_layout,model=2,method=6,nst=10,exact,resplit,even;
+ptc_create_layout,model=2,method=6,nst=10,
+!exact,
+resplit,even;
 !ptc_observe, place="IP.1";
 !set particles
 !ptc_start, X=0, PX=0, Y=0, PY=0, T=0, PT=0;
@@ -105,13 +114,15 @@ ptc_create_layout,model=2,method=6,nst=10,exact,resplit,even;
 call, file="madxInrays.madx";
 !run
 !ptc_track, icase=6,element_by_element,turns=1,dump,onetable,norm_no=1,file;!,
-Rpipe := 0.03;! beam pipe ratio [m]
-Eacceptance := 0.0398;!
-!norm_no is order of the normal form : 1=linear, 2 ...
-ptc_setswitch,radiation=true;
-ptc_track, icase=6,turns=1,dump,onetable,
-maxaper={Rpipe,0.01,Rpipe,0.01,1,Eacceptance},norm_no=4,file,
-radiation,radiation_quad;
+!norm_no is order of the normal form : 1=linear, 2 ...!
+!ptc_setcavities;
+ptc_setswitch,debuglevel=1,maxacceleration=true,totalpath=false,
+	radiation=false,fringe=false,time=true;
+ptc_track, icase=6,turns=1,dump,onetable,element_by_element,
+maxaper={Rpipe,AngMax,Rpipe,AngMax,0,0},
+! the t and pt vars do not change anything
+norm_no=4,file;!,
+!radiation,radiation_quad;
 !DYNAP,FASTUNE,TURNS=1024,LYAPUNOV=1.e-7;
 !plot, file="track_x",table=track,haxis=x,vaxis=px,particle=1,2,3,4,5,6,
 !  colour=1000, multiple, symbol=3;

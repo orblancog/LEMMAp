@@ -2,7 +2,7 @@ command: beam  module: control
 parameter: particle   string: positron
 parameter: sequence   string: default_beam
 parameter: bunched   logical: true
-parameter: radiate   logical: true
+parameter: radiate   logical: false
 parameter: mass   double value:     0.000510998928
 parameter: charge   double value:                  1
 parameter: energy   double value:                 45

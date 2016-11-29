@@ -1,0 +1,31 @@
+#!/bin/sh -f
+# This script runs particles 
+# file name should be passed as argument
+
+
+echo "HI there ! This script runs particles through out and acc"
+echo "  with fixed targer."
+
+echo "Checking soft. requirements :"
+echo "  Checking for root "
+hash root 2>/dev/null || { echo >&2 "I require root but it's not installed.  Aborting."; exit 1; }
+echo "  root found"
+echo "  Checking for awk "
+hash awk 2>/dev/null || { echo >&2 "I require awk but it's not installed.  Aborting."; exit 1; }
+echo "  akw found"
+echo "  Checking for madx"
+hash madx 2>/dev/null || { echo >&2 "I require madx but it's not installed.  Aborting."; exit 1; }
+echo "All soft. requirements are OK..."
+
+echo "Runing initial target output"
+echo " ... here the code"
+
+echo "Translating target output to tracking settings"
+./gettargetparticles SimTarget-Be001_fort.68
+echo "Running particles through lattice"
+madx64 < job.madx
+echo "Draw Phase Space after tracking ..."
+root -l -x -q "DrawPhaseSpace.C(\"START\")"
+root -l -x -q "DrawPhaseSpace.C(\"END\")"
+
+echo "...Finally DONE. Adios"

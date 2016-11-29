@@ -42,7 +42,7 @@
 @ TITLE            %08s "no-title"
 @ ORIGIN           %16s "5.02.10 Linux 64"
 @ DATE             %08s "29/11/16"
-@ TIME             %08s "14.26.54"
+@ TIME             %08s "15.48.53"
 * NAME                                S               BETX               BETY               ALFX               ALFY                MUX                MUY                 DX                 DY                  X                DPX                DPY                DDX                DDY               HINV 
 $ %s                                %le                %le                %le                %le                %le                %le                %le                %le                %le                %le                %le                %le                %le                %le                %le 
  "LOW_EMIT_RING$START"                   0        5.500641159        28.99989111   -2.830717791e-15   -8.579979597e-15                  0                  0      0.08502507007                  0     1.18497862e-19   -0.0003914404109                 -0       0.1419035357                  0     0.001315101001

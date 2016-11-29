@@ -94,7 +94,7 @@ assign, echo="beam0.txt";
 show, beam;
 assign, echo=terminal;
 ! ! Generating particles(flagname,Nparticles)
-system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
+! system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
 
 
 

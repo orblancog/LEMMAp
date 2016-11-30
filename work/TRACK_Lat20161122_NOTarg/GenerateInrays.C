@@ -225,7 +225,8 @@ int GenerateInrays (const char * k, int N) {
       upy = pybeta + etapy*upd +0e-3;
       if (debug) mydebug <<ux<<'\t'<<upx<<'\t'<<uy<<'\t'<<upy<<"\t"<<ups<<"\t"<<upd<<endl ;
       if (madxtrac==1) mymadxtrac << "start, x="<<ux<<",px="<<upx<<",y="<<uy<<",py="<<upy<<",t="<<ups<<",pt="<<upd<<";\n";
-      if (madxtrac==2) mymadxtrac << "ptc_start, x="<<ux<<",px="<<upx<<",y="<<uy<<",py="<<upy<<",t="<<ups<<",pt="<<upd<<";\n";
+      //      if (madxtrac==2) mymadxtrac << "ptc_start, x="<<ux<<",px="<<upx<<",y="<<uy<<",py="<<upy<<",t="<<ups<<",pt="<<upd<<";\n";
+      if (madxtrac==2) mymadxtrac << "ptc_start, x="<<ux<<",px="<<upx<<",y="<<uy<<",py="<<upy<<",t="<<ups<<",pt="<<"0"<<";\n";
     }
   }
   if (debug) mydebug.close();

@@ -19,10 +19,10 @@ beam, PARTICLE=positron, ENERGY=E0,
 ! The ring 
 call, file = "Pos_45GeV_Ring_8.mad.madx";
 use, sequence=Low_Emit_RING;
+SXT_ON := 1;
 
 ! The cavity parameters
 RF_ON  := 1;
-SXT_ON := 1;
 !RFc->LAG := -twopi/4;
 !show, rfc;
 !stop;
@@ -94,7 +94,7 @@ assign, echo="beam0.txt";
 show, beam;
 assign, echo=terminal;
 ! ! Generating particles(flagname,Nparticles)
-! system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
+system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
 
 
 

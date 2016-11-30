@@ -10,6 +10,8 @@ BEGIN { IGNORECASE=1;
 {
     ct = -1*$6*clight;
     pt = ($5-Energy)/Energy;
-    print "ptc_start, x="$1",px="$2",y="$3",py="$4",t="ct",pt="pt";" >> "madxInrays.madx";
+    px = $2/Energy;
+    py = $4/Energy;
+    print "ptc_start, x="$1",px="px",y="$3",py="py",t="ct",pt="pt";" >> "madxInrays.madx";
 }
 END { print "  created file 'madxInrays.madx' . Adios"}

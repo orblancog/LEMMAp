@@ -14,21 +14,22 @@ espread:= 1e-3;
 beam, PARTICLE=positron, ENERGY=E0,
       ex=emitx, ey=emity, et=blength*espread,
       sigt=blength, sige=espread, kbunch=nbunch,
-      NPART=nparpb, bcurrent=bcur, RADIATE=true;
+      NPART=nparpb, bcurrent=bcur, RADIATE=false;
 
 ! The ring 
 call, file = "Pos_45GeV_Ring_8.mad.madx";
-use, sequence=Low_Emit_RING;
+use, sequence=Low_Emit_RING, range=#s/#e;
 SXT_ON := 1;
 
 ! The cavity parameters
 RF_ON       := 1.0;
-!RFc->LAG    := twopi/4;
+RFc->LAG    := 0.133;!25;
 RFc->FREQ   := 500.117256e6;
 RFc->HARMON := 10510;
 !show, rfc;
 !save,sequence=Low_Emit_RING, file="temp.seq";
-!use, sequence=Low_Emit_RING;
+!call, file="temp.seq";
+!use, sequence=LER_mod, range=#s/rfc;
 !stop;
 
 ! Beam pipe
@@ -109,9 +110,9 @@ system, 'root -l -x -q "GenerateInrays.C(\"START\",1e3)"';
 !set parameters
 system, "rm -f track*";
 ptc_create_universe;
-ptc_create_layout,model=1,method=6,nst=10,
-exact;!,
-!resplit,even;
+ptc_create_layout,model=2,method=6,nst=10,
+!exact;!,
+resplit,even;
 !ptc_observe, place="IP.1";
 !set particles
 !ptc_start, X=0, PX=0, Y=0, PY=0, T=0, PT=0;
@@ -121,13 +122,17 @@ call, file="madxInrays.madx";
 !ptc_track, icase=6,element_by_element,turns=1,dump,onetable,norm_no=1,file;!,
 !norm_no is order of the normal form : 1=linear, 2 ...!
 !ptc_setcavities;
-ptc_setswitch,debuglevel=1,maxacceleration=false,totalpath=false,
-	radiation=true,fringe=false,time=true,nocavity=false;
-ptc_track, icase=6,turns=1,dump,onetable,!element_by_element,
+!ptc_setswitch,debuglevel=1,maxacceleration=false,totalpath=false,
+!	radiation=true,fringe=false,time=true,nocavity=false;
+ptc_track, icase=6,turns=1,dump,onetable,element_by_element,
 maxaper={Rpipe,AngMax,Rpipe,AngMax,0,0},
 ! the t and pt vars do not change anything
-norm_no=4,file,
-radiation,radiation_quad;
+!norm_no=4,
+file,
+radiation;
+
+!ptc_observe,place=#e;
+!ptc_trackline, turns=1,onetable,file;
 ptc_track_end;
 ptc_end;
 !end of NO purpose tracking in PTC

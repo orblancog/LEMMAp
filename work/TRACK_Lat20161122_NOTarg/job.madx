@@ -14,17 +14,21 @@ espread:= 1e-3;
 beam, PARTICLE=positron, ENERGY=E0,
       ex=emitx, ey=emity, et=blength*espread,
       sigt=blength, sige=espread, kbunch=nbunch,
-      NPART=nparpb, bcurrent=bcur, RADIATE=false;
+      NPART=nparpb, bcurrent=bcur, RADIATE=true;
 
 ! The ring 
 call, file = "Pos_45GeV_Ring_8.mad.madx";
 use, sequence=Low_Emit_RING;
+SXT_ON := 1;
 
 ! The cavity parameters
-RF_ON  := 1;
-SXT_ON := 1;
-!RFc->LAG := -twopi/4;
+RF_ON       := 1.0;
+!RFc->LAG    := twopi/4;
+RFc->FREQ   := 500.117256e6;
+RFc->HARMON := 10510;
 !show, rfc;
+!save,sequence=Low_Emit_RING, file="temp.seq";
+!use, sequence=Low_Emit_RING;
 !stop;
 
 ! Beam pipe
@@ -60,12 +64,13 @@ hinv := (1+(table(twiss,alfx))^2)/table(twiss,betx)*table(twiss,dx)^2
 
 
 ! some plots for comparison of twiss functions
+system, "rm -f *tws";
 savebeta,label=betaSTART,place=#s;
 savebeta,label=betaEND,place=#e;
 select, flag=twiss, clear;
 select, flag=twiss, column= name,s,betx,bety,alfx,alfy,mux,muy,dx,dy,x,
 	dpx,dpy,ddx,ddy,hinv;
-TWISS, chrom, SAVE, file="LEMMAp_SXT_OFF.tws";
+TWISS, chrom, SAVE, file="LEMMAp_SXT_ON.tws";
 
 system, "rm -f madx.ps";
 plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,hmin=0,hmax=200,title="First ARC Cell";
@@ -73,13 +78,13 @@ plot, colour=100, haxis=s, vaxis=hinv, hmin=0, hmax=200, title="First ARC Cell";
 plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,dy,title="Low Emit Ring (LER)";
 plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="LER";
 
-SXT_ON := 1;
-use, sequence=Low_Emit_RING;
-TWISS, chrom, SAVE, file="LEMMAp_SXT_ON.tws";
-plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="LER (SXT ON)";
-plot, colour=100, haxis=s, vaxis1=wx, title="LER (SXT ON)";
-plot, colour=100, haxis=s, vaxis1=wy, title="LER (SXT ON)";
-plot, colour=100, haxis=s, vaxis1=ddx, title="LER (SXT ON)";
+! SXT_ON := 1;
+! use, sequence=Low_Emit_RING;
+! TWISS, chrom, SAVE, file="LEMMAp_SXT_ON.tws";
+! plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="LER (SXT ON)";
+! plot, colour=100, haxis=s, vaxis1=wx, title="LER (SXT ON)";
+! plot, colour=100, haxis=s, vaxis1=wy, title="LER (SXT ON)";
+! plot, colour=100, haxis=s, vaxis1=ddx, title="LER (SXT ON)";
 
 system, "ps2pdf madx.ps";
 ! End of initial twiss plots and comparison
@@ -94,7 +99,7 @@ assign, echo="beam0.txt";
 show, beam;
 assign, echo=terminal;
 ! ! Generating particles(flagname,Nparticles)
-system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
+system, 'root -l -x -q "GenerateInrays.C(\"START\",1e3)"';
 
 
 
@@ -104,9 +109,9 @@ system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
 !set parameters
 system, "rm -f track*";
 ptc_create_universe;
-ptc_create_layout,model=2,method=6,nst=10,
-!exact,
-resplit,even;
+ptc_create_layout,model=1,method=6,nst=10,
+exact;!,
+!resplit,even;
 !ptc_observe, place="IP.1";
 !set particles
 !ptc_start, X=0, PX=0, Y=0, PY=0, T=0, PT=0;
@@ -116,23 +121,20 @@ call, file="madxInrays.madx";
 !ptc_track, icase=6,element_by_element,turns=1,dump,onetable,norm_no=1,file;!,
 !norm_no is order of the normal form : 1=linear, 2 ...!
 !ptc_setcavities;
-ptc_setswitch,debuglevel=1,maxacceleration=true,totalpath=false,
-	radiation=false,fringe=false,time=true;
-ptc_track, icase=6,turns=1,dump,onetable,element_by_element,
+ptc_setswitch,debuglevel=1,maxacceleration=false,totalpath=false,
+	radiation=true,fringe=false,time=true,nocavity=false;
+ptc_track, icase=6,turns=1,dump,onetable,!element_by_element,
 maxaper={Rpipe,AngMax,Rpipe,AngMax,0,0},
 ! the t and pt vars do not change anything
-norm_no=4,file;!,
-!radiation,radiation_quad;
-!DYNAP,FASTUNE,TURNS=1024,LYAPUNOV=1.e-7;
-!plot, file="track_x",table=track,haxis=x,vaxis=px,particle=1,2,3,4,5,6,
-!  colour=1000, multiple, symbol=3;
-!plot, file="track_y",table=track,haxis=y,vaxis=py,particle=1,2,3,4,5,6,
-!  colour=1000, multiple, symbol=3;
+norm_no=4,file,
+radiation,radiation_quad;
 ptc_track_end;
 ptc_end;
 !end of NO purpose tracking in PTC
 
 ! split tracking results inf plot friendly files
 system, "./getobservedata trackone";
+! plot the phase  space
 !system, 'root -x -l -q "DrawPhaseSpace.C(\"START\")" ';
+!system, 'root -x -l -q "DrawPhaseSpace.C(\"END\")" ';
 

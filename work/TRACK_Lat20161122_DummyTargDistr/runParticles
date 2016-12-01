@@ -14,7 +14,7 @@ echo "  Checking for awk "
 hash awk 2>/dev/null || { echo >&2 "I require awk but it's not installed.  Aborting."; exit 1; }
 echo "  akw found"
 echo "  Checking for madx"
-hash madx64 2>/dev/null || { echo >&2 "I require madx but it's not installed.  Aborting."; exit 1; }
+hash madx 2>/dev/null || { echo >&2 "I require madx but it's not installed.  Aborting."; exit 1; }
 echo "All soft. requirements are OK..."
 
 echo "Runing initial target output"

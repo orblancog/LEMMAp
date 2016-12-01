@@ -21,7 +21,7 @@ int GenerateInrays (const char * k, int N) {
   //  gROOT->Reset();
   //  int N =10000;//number of particles to generate
   int debug=1; // if debug 1, print goes to stdout
-  int madxtrac=2;//track in 1=MAD-X and 2=PTC_MAD-X
+  int madxtrac=1;//track in 1=MAD-X and 2=PTC_MAD-X
 
   // Energy distribution 
   // 0=Uniform -EnergySpread/2 to EnergySpread/2
@@ -225,8 +225,8 @@ int GenerateInrays (const char * k, int N) {
       upy = pybeta + etapy*upd +0e-3;
       if (debug) mydebug <<ux<<'\t'<<upx<<'\t'<<uy<<'\t'<<upy<<"\t"<<ups<<"\t"<<upd<<endl ;
       if (madxtrac==1) mymadxtrac << "start, x="<<ux<<",px="<<upx<<",y="<<uy<<",py="<<upy<<",t="<<ups<<",pt="<<upd<<";\n";
-      //      if (madxtrac==2) mymadxtrac << "ptc_start, x="<<ux<<",px="<<upx<<",y="<<uy<<",py="<<upy<<",t="<<ups<<",pt="<<upd<<";\n";
-      if (madxtrac==2) mymadxtrac << "ptc_start, x="<<ux<<",px="<<upx<<",y="<<uy<<",py="<<upy<<",t="<<ups<<",pt="<<"0"<<";\n";
+      if (madxtrac==2) mymadxtrac << "ptc_start, x="<<ux<<",px="<<upx<<",y="<<uy<<",py="<<upy<<",t="<<ups<<",pt="<<upd<<";\n";
+      //      if (madxtrac==2) mymadxtrac << "ptc_start, x="<<ux<<",px="<<upx<<",y="<<uy<<",py="<<upy<<",t="<<ups<<",pt="<<"0"<<";\n";
     }
   }
   if (debug) mydebug.close();

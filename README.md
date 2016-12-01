@@ -4,7 +4,7 @@ This is the README file.
 These folders contain the madx tracking work and results of the e+ ring  
 for the Muon Collider Project LEMMA [1].  
 
-_Update : Checking best ptc track parameters when radiation on_  
+_Update : Radiation OKish with thin lens track in MAD-X_  
          _Running one turn with Dummy Target_
  
 ## Folder structure

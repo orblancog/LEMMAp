@@ -23,7 +23,7 @@ echo " ... here the code"
 echo "Translating target output to tracking settings"
 ./gettargetparticles SimTarget-Be001_fort.68
 echo "Running particles through lattice"
-madx64 < job.madx
+madx < job.madx
 echo "Draw Phase Space after tracking ..."
 root -l -x -q "DrawPhaseSpace.C(\"START\")"
 root -l -x -q "DrawPhaseSpace.C(\"END\")"

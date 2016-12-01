@@ -14,7 +14,7 @@ espread:= 1e-3;
 beam, PARTICLE=positron, ENERGY=E0,
       ex=emitx, ey=emity, et=blength*espread,
       sigt=blength, sige=espread, kbunch=nbunch,
-      NPART=nparpb, bcurrent=bcur, RADIATE=false;
+      NPART=nparpb, bcurrent=bcur, RADIATE=true;
 
 ! The ring 
 call, file = "Pos_45GeV_Ring_8.mad.madx";
@@ -22,9 +22,9 @@ use, sequence=Low_Emit_RING, range=#s/#e;
 SXT_ON := 1;
 
 ! The cavity parameters
-RF_ON       := 1.0;
-RFc->LAG    := 0;!zero when norad
-RFc->FREQ   := 500.117256e6;
+RF_ON       := 1;
+RFc->LAG    := 0.5-0.17;
+RFc->FREQ   := 500.117256;
 RFc->HARMON := 10510;
 !show, rfc;
 !save,sequence=Low_Emit_RING, file="temp.seq";
@@ -63,7 +63,6 @@ hinv := (1+(table(twiss,alfx))^2)/table(twiss,betx)*table(twiss,dx)^2
      + 2*table(twiss,alfx)*table(twiss,dx)*table(twiss,dpx)
      + table(twiss,betx)*table(twiss,dpx)^2;
 
-
 ! some plots for comparison of twiss functions
 system, "rm -f *tws";
 savebeta,label=betaSTART,place=#s;
@@ -78,15 +77,6 @@ plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,hmin=0,hmax=200,title="Fi
 plot, colour=100, haxis=s, vaxis=hinv, hmin=0, hmax=200, title="First ARC Cell";
 plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,dy,title="Low Emit Ring (LER)";
 plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="LER";
-
-! SXT_ON := 1;
-! use, sequence=Low_Emit_RING;
-! TWISS, chrom, SAVE, file="LEMMAp_SXT_ON.tws";
-! plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="LER (SXT ON)";
-! plot, colour=100, haxis=s, vaxis1=wx, title="LER (SXT ON)";
-! plot, colour=100, haxis=s, vaxis1=wy, title="LER (SXT ON)";
-! plot, colour=100, haxis=s, vaxis1=ddx, title="LER (SXT ON)";
-
 system, "ps2pdf madx.ps";
 ! End of initial twiss plots and comparison
 
@@ -100,45 +90,72 @@ assign, echo="beam0.txt";
 show, beam;
 assign, echo=terminal;
 ! ! Generating particles(flagname,Nparticles)
-! system, 'root -l -x -q "GenerateInrays.C(\"START\",1e3)"';
+! system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
 
-
-
-! beggining track
-! NO purpuse tracking in PTC
-!stop;
-!set parameters
+! NO purpose tracking in MAD-X
 system, "rm -f track*";
-ptc_create_universe;
-ptc_create_layout,model=2,method=6,nst=10,
-!exact;!,
-resplit,even;
-!ptc_observe, place="IP.1";
+!stop;
+!makethin lenses
+select,flag=makethin,class=sbend,thick=false,slice=4;!
+!select,flag=makethin,class=rbend,thick=false,slice=2;!no rbends
+select,flag=makethin,class=quadrupole,thick=false,slice=2;
+select,flag=makethin,class=sextupole,thick=false,slice=2;
+makethin, sequence=Low_Emit_RING,style=teapot,makedipedge;
+save, sequence=Low_Emit_RING,file="Low_Emit_RING.thin.seq";
+call, file="Low_Emit_RING.thin.seq";
+use, sequence=Low_Emit_RING;
+!set parameters
+track, onepass=true,aperture=true,onetable,recloss,dump;
+!call, file="observe.madx";!observe;!set obeservation points
 !set particles
-!ptc_start, X=0, PX=0, Y=0, PY=0, T=0, PT=0;
-!ptc_start, X=1e-3, PX=1e-3, Y=1e-3, PY=1e-3, T=1e-9, PT=1e-9;
-call, file="madxInrays.madx";
-!run
-!ptc_track, icase=6,element_by_element,turns=1,dump,onetable,norm_no=1,file;!,
-!norm_no is order of the normal form : 1=linear, 2 ...!
-!ptc_setcavities;
-!ptc_setswitch,debuglevel=1,maxacceleration=false,totalpath=false,
-!	radiation=true,fringe=false,time=true,nocavity=false;
-ptc_track, icase=6,turns=1,dump,onetable,element_by_element,
-maxaper={Rpipe,AngMax,Rpipe,AngMax,0,0},
-! the t and pt vars do not change anything
-!norm_no=4,
-file;!,
-!radiation;
+!start, X=1e-3, PX=1e-3, Y=1e-3, PY=1e-3, T=1e-9, PT=1e-9;
+!start, X=1e-3, PX=1e-3, Y=1e-5, PY=1e-5, T=1e-9, PT=1e-9;
+!start, X=1e-3, PX=5e-4, Y=1e-5, PY=1e-5, T=1e-9, PT=1e-9;
+!start, X=1e-9, PX=1e-9, Y=1e-9, PY=1e-9, T=1e-9, PT=1e-9;
+call,file="madxInrays.madx";
+run,turns=1,maxaper={Rpipe,AngMax,Rpipe,AngMax,0.0,0.0};!run track
+! ! the t and pt vars do not change anything
+!dynap;
+endtrack;
+write, table=trackloss, file="trackloss";!write lost particles
+! End of NO purpose tracking in MAD-X
 
-!ptc_observe,place=#e;
-!ptc_trackline, turns=1,onetable,file;
-ptc_track_end;
-ptc_end;
-!end of NO purpose tracking in PTC
+! ! beggining track
+! ! NO purpuse tracking in PTC
+! !stop;
+! !set parameters
+! system, "rm -f track*";
+! ptc_create_universe;
+! ptc_create_layout,model=2,method=6,nst=10,
+! !exact;!,
+! resplit,even;
+! !ptc_observe, place="IP.1";
+! !set particles
+! !ptc_start, X=0, PX=0, Y=0, PY=0, T=0, PT=0;
+! !ptc_start, X=1e-3, PX=1e-3, Y=1e-3, PY=1e-3, T=1e-9, PT=1e-9;
+! call, file="madxInrays.madx";
+! !run
+! !ptc_track, icase=6,element_by_element,turns=1,dump,onetable,norm_no=1,file;!,
+! !norm_no is order of the normal form : 1=linear, 2 ...!
+! !ptc_setcavities;
+! !ptc_setswitch,debuglevel=1,maxacceleration=false,totalpath=false,
+! !	radiation=true,fringe=false,time=true,nocavity=false;
+! ptc_track, icase=6,turns=1,dump,onetable,element_by_element,
+! maxaper={Rpipe,AngMax,Rpipe,AngMax,0,0},
+! ! the t and pt vars do not change anything
+! !norm_no=4,
+! file,
+! radiation;
+
+! !ptc_observe,place=#e;
+! !ptc_trackline, turns=1,onetable,file;
+! ptc_track_end;
+! ptc_end;
+! !end of NO purpose tracking in PTC
 
 ! split tracking results inf plot friendly files
 system, "./getobservedata trackone";
+system, "mv trackLOW_EMIT_RING\$END trackEND";
 ! plot the phase  space
 !system, 'root -x -l -q "DrawPhaseSpace.C(\"START\")" ';
 !system, 'root -x -l -q "DrawPhaseSpace.C(\"END\")" ';

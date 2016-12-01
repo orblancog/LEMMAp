@@ -12,6 +12,7 @@ BEGIN { IGNORECASE=1;
     pt = ($5-Energy)/Energy;
     px = $2/Energy;
     py = $4/Energy;
-    print "ptc_start, x="$1",px="px",y="$3",py="py",t="ct",pt="pt";" >> "madxInrays.madx";
+    # print "ptc_start, x="$1",px="px",y="$3",py="py",t="ct",pt="pt";" >> "madxInrays.madx";
+    print "start, x="$1",px="px",y="$3",py="py",t="ct",pt="pt";" >> "madxInrays.madx";
 }
 END { print "  created file 'madxInrays.madx' . Adios"}

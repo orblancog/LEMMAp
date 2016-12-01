@@ -22,9 +22,9 @@ use, sequence=Low_Emit_RING, range=#s/#e;
 SXT_ON := 1;
 
 ! The cavity parameters
-RF_ON       := 0.2;!4.00;
+RF_ON       := 1;
 RFc->LAG    := 0.5-0.17;
-RFc->FREQ   := 500.117256e6;
+RFc->FREQ   := 500.117256;
 RFc->HARMON := 10510;
 !show, rfc;
 !save,sequence=Low_Emit_RING, file="temp.seq";
@@ -63,7 +63,6 @@ hinv := (1+(table(twiss,alfx))^2)/table(twiss,betx)*table(twiss,dx)^2
      + 2*table(twiss,alfx)*table(twiss,dx)*table(twiss,dpx)
      + table(twiss,betx)*table(twiss,dpx)^2;
 
-
 ! some plots for comparison of twiss functions
 system, "rm -f *tws";
 savebeta,label=betaSTART,place=#s;
@@ -91,7 +90,7 @@ assign, echo="beam0.txt";
 show, beam;
 assign, echo=terminal;
 ! ! Generating particles(flagname,Nparticles)
-system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
+system, 'root -l -x -q "GenerateInrays.C(\"START\",1e3)"';
 
 ! NO purpose tracking in MAD-X
 system, "rm -f track*";
@@ -114,7 +113,7 @@ track, onepass=true,aperture=true,onetable,recloss,dump;
 !start, X=1e-3, PX=5e-4, Y=1e-5, PY=1e-5, T=1e-9, PT=1e-9;
 !start, X=1e-9, PX=1e-9, Y=1e-9, PY=1e-9, T=1e-9, PT=1e-9;
 call,file="madxInrays.madx";
-run,turns=1,maxaper={Rpipe,AngMax,Rpipe,AngMax,1.0,0.1};!run track
+run,turns=200,maxaper={Rpipe,AngMax,Rpipe,AngMax,1.0,0.1};!run track
 !dynap;
 endtrack;
 write, table=trackloss, file="trackloss";!write lost particles
@@ -159,4 +158,3 @@ system, "mv trackLOW_EMIT_RING\$END trackEND";
 ! plot the phase  space
 !system, 'root -x -l -q "DrawPhaseSpace.C(\"START\")" ';
 !system, 'root -x -l -q "DrawPhaseSpace.C(\"END\")" ';
-

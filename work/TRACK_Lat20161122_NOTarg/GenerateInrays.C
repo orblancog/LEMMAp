@@ -197,15 +197,22 @@ int GenerateInrays (const char * k, int N) {
   //  cout << sigmax0 << sigmay0;
   //  sigmas0  = TMath::Sqrt(et*0);//already assigned when reading beam0
   sigmad0  = 1.0/betar*Energyspread;//TMath::Sqrt(et*0);//\Delta E/(Pc) = 1/\beta_r * \Delta E/E
+  Double_t xbetarnd,pxbetarnd;
+  Double_t ybetarnd,pybetarnd;
+  Double_t tbetarnd,ptbetarnd;
 
   while (i<N){
     //x
-    xbeta = xrnd->Gaus(0,sigmax0);
-    pxbeta = pxrnd->Gaus(0,sigmapx0);
+    xbetarnd   =  xrnd->Gaus(0,1);
+    pxbetarnd  =  pxrnd->Gaus(0,1);
+    xbeta      =  TMath::Sqrt(ex*betax)*xbetarnd;
+    pxbeta     =  TMath::Sqrt(ex/betax)*pxbetarnd - alfax*TMath::Sqrt(ex/betax)*xbetarnd;
     xgausvalue = (gammax*xbeta*xbeta+2*alfax*xbeta*pxbeta+betax*pxbeta*pxbeta)/(TMath::TwoPi()/2*ex);
     //y
-    ybeta = yrnd->Gaus(0,sigmay0);
-    pybeta = pyrnd->Gaus(0,sigmapy0);
+    ybetarnd   = yrnd->Gaus(0,1);
+    pybetarnd  = pyrnd->Gaus(0,1);
+    ybeta      =  TMath::Sqrt(ey*betay)*ybetarnd;
+    pybeta     =  TMath::Sqrt(ey/betay)*pybetarnd - alfay*TMath::Sqrt(ey/betay)*ybetarnd;    
     ygausvalue = (gammay*ybeta*ybeta+2*alfay*ybeta*pybeta+betay*pybeta*pybeta)/(TMath::TwoPi()/2*ey);
     //d
     ups = bunchlrnd->Gaus(0,sigmas0);
@@ -219,8 +226,8 @@ int GenerateInrays (const char * k, int N) {
       
     if (xgausvalue<gauslimit && ygausvalue<gauslimit && tgausvalue<gauslimit){
       i++;
-      ux = xbeta + etax*upd    +0e-3;
-      upx = pxbeta + etapx*upd -0e-3;
+      ux = xbeta ;//+ etax*upd    +0e-3;
+      upx = pxbeta;// + etapx*upd -0e-3;
       uy = ybeta + etay*upd    +0e-3;
       upy = pybeta + etapy*upd +0e-3;
       if (debug) mydebug <<ux<<'\t'<<upx<<'\t'<<uy<<'\t'<<upy<<"\t"<<ups<<"\t"<<upd<<endl ;

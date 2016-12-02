@@ -162,7 +162,7 @@ int DrawPhaseSpace (const char * k) {//k is the flag name
   Double_t h =  600;
   TCanvas * c1 = new TCanvas(betafl->Data(),betafl->Data(), w, h);
   c1->SetGrid();
-  c1->Divide(3,1,0.01,0.01);
+  c1->Divide(3,1,0.02,0.02);
   c1->SetWindowSize(w + (w - c1->GetWw()), h + (h - c1->GetWh()));
   //  TCanvas *c1 = new TCanvas("c1");
   c1->cd(1);
@@ -180,11 +180,19 @@ int DrawPhaseSpace (const char * k) {//k is the flag name
   // Read trackinfo
   //  TCanvas * c2 = new TCanvas("c2", "c2", w, h);
 
+  gStyle->SetPalette(56);
+  // int NCont = 255;
+  // gStyle->SetNumberContours(NCont);
+  // Double_t stops[3] = { 0.00, 0.50, 1.00 };
+  // Double_t red[3]   = { 0.00, 1.00, 1.00 };
+  // Double_t green[3] = { 0.00, 1.00, 0.00 };
+  // Double_t blue[3]  = { 0.00, 1.00, 0.00 };
+
   TString * trackfl = new TString("track");
   trackfl->Append(k);
-  TH2 * trackxpx = new TH2F("H. Phase Space","H Phase Space",400,-4,4,400,-0.4,0.4);//number,-x,x,number,-y,y
-  TH2 * trackypy = new TH2F("V. Phase Space","V Phase Space",400,-40,40,400,-0.400,0.400);
-  TH2 * tracksd = new TH2F("L. Phase Space","L. Phase Space",400,-40,40,400,-40,40);
+  TH2 * trackxpx = new TH2F("H. Phase Space","H Phase Space",51,-40,40,51,-4,4);//number,-x,x,number,-y,y
+  TH2 * trackypy = new TH2F("V. Phase Space","V Phase Space",51,-40,40,51,-4.00,4.00);
+  TH2 * tracksd = new TH2F("L. Phase Space","L. Phase Space",51,-40,40,51,-100,100);
 
   //  betafl->Append(".txt");
   track0in.open(trackfl->Data());
@@ -212,7 +220,10 @@ int DrawPhaseSpace (const char * k) {//k is the flag name
   gammay = (1 + alfay*alfay )/betay;
   cout <<"    gammax "<<gammax<<endl;
   cout <<"    gammay "<<gammay<<endl;
+
+
   c1->cd(1);
+  gPad->SetLogz();
   trackxpx->Draw("colz");
   trackxpx->SetTitle("H. Phase Space");
   trackxpx->GetXaxis()->SetTitle("x [mm]");
@@ -220,6 +231,7 @@ int DrawPhaseSpace (const char * k) {//k is the flag name
   trackxpx->GetXaxis()->CenterTitle();
   trackxpx->GetYaxis()->CenterTitle();
   c1->cd(2);
+  gPad->SetLogz();
   trackypy->Draw("colz");
   trackypy->SetTitle("V. Phase Space");
   trackypy->GetXaxis()->SetTitle("y [mm]");
@@ -227,6 +239,7 @@ int DrawPhaseSpace (const char * k) {//k is the flag name
   trackypy->GetXaxis()->CenterTitle();
   trackypy->GetYaxis()->CenterTitle();
   c1->cd(3);
+  gPad->SetLogz();
   tracksd->Draw("colz");
   tracksd->SetTitle("L. Phase Space");
   tracksd->GetXaxis()->SetTitle("t [mm]");

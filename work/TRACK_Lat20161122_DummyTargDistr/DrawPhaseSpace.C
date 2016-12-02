@@ -190,9 +190,9 @@ int DrawPhaseSpace (const char * k) {//k is the flag name
 
   TString * trackfl = new TString("track");
   trackfl->Append(k);
-  TH2 * trackxpx = new TH2F("H. Phase Space","H Phase Space",51,-40,40,51,-4,4);//number,-x,x,number,-y,y
-  TH2 * trackypy = new TH2F("V. Phase Space","V Phase Space",51,-40,40,51,-4.00,4.00);
-  TH2 * tracksd = new TH2F("L. Phase Space","L. Phase Space",51,-40,40,51,-100,100);
+  TH2 * trackxpx = new TH2F("H. Phase Space","H Phase Space",61,-30,30,81,-4,4);//number,-x,x,number,-y,y
+  TH2 * trackypy = new TH2F("V. Phase Space","V Phase Space",61,-30,30,81,-4.00,4.00);
+  TH2 * tracksd = new TH2F("L. Phase Space","L. Phase Space",61,-300,300,81,-100,100);
 
   //  betafl->Append(".txt");
   track0in.open(trackfl->Data());

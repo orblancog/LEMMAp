@@ -180,6 +180,10 @@ int DrawPhaseSpace (const char * k) {//k is the flag name
   // Read trackinfo
   //  TCanvas * c2 = new TCanvas("c2", "c2", w, h);
 
+
+  //  gStyle->SetPalette(56);
+
+
   TString * trackfl = new TString("track");
   trackfl->Append(k);
   TH2 * trackxpx = new TH2F("H. Phase Space","H Phase Space",400,-4,4,400,-0.4,0.4);//number,-x,x,number,-y,y

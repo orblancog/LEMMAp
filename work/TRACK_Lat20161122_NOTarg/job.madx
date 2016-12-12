@@ -63,21 +63,24 @@ hinv := (1+(table(twiss,alfx))^2)/table(twiss,betx)*table(twiss,dx)^2
      + 2*table(twiss,alfx)*table(twiss,dx)*table(twiss,dpx)
      + table(twiss,betx)*table(twiss,dpx)^2;
 
-! ! some plots for comparison of twiss functions
-! system, "rm -f *tws";
-! savebeta,label=betaSTART,place=#s;
-! savebeta,label=betaEND,place=#e;
-! select, flag=twiss, clear;
-! select, flag=twiss, column= name,keyword,s,l,betx,bety,alfx,alfy,mux,muy,dx,dy,x,
-! 	dpx,dpy,ddx,ddy,hinv;
-! TWISS, chrom, SAVE, file="LEMMAp_SXT_ON.tws";
-! system, "rm -f madx.ps";
-! plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,hmin=0,hmax=200,title="First ARC Cell";
-! plot, colour=100, haxis=s, vaxis=hinv, hmin=0, hmax=200, title="First ARC Cell";
-! plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,dy,title="Low Emit Ring (LER)";
-! plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="LER";
-! system, "ps2pdf madx.ps";
-! ! End of initial twiss plots and comparison
+! some plots for comparison of twiss functions
+system, "rm -f *tws";
+savebeta,label=betaSTART,place=#s;
+savebeta,label=betaEND,place=#e;
+select, flag=twiss, clear;
+select, flag=twiss, column= name,keyword,s,l,betx,bety,alfx,alfy,mux,muy,dx,dy,x,
+	dpx,dpy,ddx,ddy,hinv;
+TWISS, chrom, SAVE, file="LEMMAp_SXT_ON.tws";
+EMIT, deltap=0;
+show, beam;
+system, "rm -f madx.ps";
+plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,hmin=0,hmax=200,title="First ARC Cell";
+plot, colour=100, haxis=s, vaxis=hinv, hmin=0, hmax=200, title="First ARC Cell";
+plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,dy,title="Low Emit Ring (LER)";
+plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="LER";
+system, "ps2pdf madx.ps";
+! End of initial twiss plots and comparison
+stop;
 
 ! Changing the lattice start point for tracking purposes
 save, sequence=Low_Emit_RING,file="Low_Emit_RING.seq";
@@ -85,7 +88,9 @@ call, file="Low_Emit_RING.seq";
 use, sequence=Low_Emit_RING;
 seqedit, sequence=Low_Emit_RING;
 flatten;
-install, element=lowhinv,class=marker,at=90.8;!drif of some cm
+install, element=lowhinv,class=marker,at=0;!drif of some cm
+! install, element=lowhinv,class=marker,at=90.8;!drif of some cm
+! install, element=lowhinv,class=marker,at=145;!drif of some cm
 flatten;
 endedit;
 save, sequence=Low_Emit_RING,file="myLow_Emit_RING.seq";
@@ -127,7 +132,7 @@ show, beam;
 assign, echo=terminal;
 !stop;
 ! ! Generating particles(flagname,Nparticles)
-system, 'root -l -x -q "GenerateInrays.C(\"START\",1e3)"';
+system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
 
 ! NO purpose tracking in MAD-X
 system, "rm -f track*";
@@ -155,7 +160,7 @@ track, onepass=true,aperture=true,onetable,recloss,dump;
 !start, X=1e-3, PX=1e-3, Y=1e-5, PY=1e-5, T=1e-9, PT=1e-9;
 start, X=0, PX=0, Y=0, PY=0, T=0, PT=0;
 call,file="madxInrays.madx";
-run,turns=20,maxaper={Rpipe,AngMax,Rpipe,AngMax,1.0,0.1};!run track
+run,turns=1,maxaper={Rpipe,AngMax,Rpipe,AngMax,1.0,0.1};!run track
 !dynap;
 endtrack;
 write, table=trackloss, file="trackloss";!write lost particles

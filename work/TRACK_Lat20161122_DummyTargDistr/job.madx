@@ -113,7 +113,7 @@ track, onepass=true,aperture=true,onetable,recloss,dump;
 !start, X=1e-3, PX=5e-4, Y=1e-5, PY=1e-5, T=1e-9, PT=1e-9;
 !start, X=1e-9, PX=1e-9, Y=1e-9, PY=1e-9, T=1e-9, PT=1e-9;
 call,file="madxInrays.madx";
-run,turns=1,maxaper={Rpipe,AngMax,Rpipe,AngMax,0.0,0.0};!run track
+run,turns=100,maxaper={Rpipe,AngMax,Rpipe,AngMax,0.0,0.0};!run track
 ! ! the t and pt vars do not change anything
 !dynap;
 endtrack;

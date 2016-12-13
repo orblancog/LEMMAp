@@ -22,7 +22,7 @@ use, sequence=Low_Emit_RING, range=#s/#e;
 SXT_ON := 1;
 
 ! The cavity parameters
-RF_ON       := 1;
+RF_ON       := 2;
 RFc->LAG    := 0.5-0.17;
 RFc->FREQ   := 500.117256;
 RFc->HARMON := 10510;
@@ -71,8 +71,8 @@ select, flag=twiss, clear;
 select, flag=twiss, column= name,keyword,s,l,betx,bety,alfx,alfy,mux,muy,dx,dy,x,
 	dpx,dpy,ddx,ddy,hinv;
 TWISS, chrom, SAVE, file="LEMMAp_SXT_ON.tws";
-EMIT, deltap=0;
-show, beam;
+!EMIT, deltap=0;
+!show, beam;
 system, "rm -f madx.ps";
 plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,hmin=0,hmax=200,title="First ARC Cell";
 plot, colour=100, haxis=s, vaxis=hinv, hmin=0, hmax=200, title="First ARC Cell";
@@ -80,7 +80,7 @@ plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,dy,title="Low Emit Ring (
 plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="LER";
 system, "ps2pdf madx.ps";
 ! End of initial twiss plots and comparison
-stop;
+!stop;
 
 ! Changing the lattice start point for tracking purposes
 save, sequence=Low_Emit_RING,file="Low_Emit_RING.seq";

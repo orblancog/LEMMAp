@@ -22,8 +22,9 @@ use, sequence=Low_Emit_RING, range=#s/#e;
 SXT_ON := 1;
 
 ! The cavity parameters
-RF_ON       := 2;
-RFc->LAG    := 0.5-0.17;
+RF_ON       := 1;
+!RFc->LAG    := with radiation 0.3839;!without radiation 0.5-0.016;
+RFc->LAG    := 0.378;!without radiation 0.5-0.016;
 RFc->FREQ   := 500.117256;
 RFc->HARMON := 10510;
 !show, rfc;
@@ -33,7 +34,7 @@ RFc->HARMON := 10510;
 !stop;
 
 ! Beam pipe
-Rpipe = 30e-3;![m]
+Rpipe = 50e-3;![m]
 AngMax = 1.0; !maximum angle 1[rad]=
 
 
@@ -80,7 +81,7 @@ plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,dy,title="Low Emit Ring (
 plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="LER";
 system, "ps2pdf madx.ps";
 ! End of initial twiss plots and comparison
-!stop;
+! stop;
 
 ! Changing the lattice start point for tracking purposes
 save, sequence=Low_Emit_RING,file="Low_Emit_RING.seq";
@@ -88,9 +89,10 @@ call, file="Low_Emit_RING.seq";
 use, sequence=Low_Emit_RING;
 seqedit, sequence=Low_Emit_RING;
 flatten;
-install, element=lowhinv,class=marker,at=0;!drif of some cm
+!install, element=lowhinv,class=marker,at=0;!drif of some cm
 ! install, element=lowhinv,class=marker,at=90.8;!drif of some cm
 ! install, element=lowhinv,class=marker,at=145;!drif of some cm
+install, element=lowhinv,class=marker,at=98.24;!drif of some cm
 flatten;
 endedit;
 save, sequence=Low_Emit_RING,file="myLow_Emit_RING.seq";
@@ -112,6 +114,13 @@ select, flag=twiss, clear;
 select, flag=twiss,column=name,keyword,s,l,betx,bety,alfx,alfy,mux,muy,dx,dy,x,
 	dpx,dpy,ddx,ddy,hinv;
 TWISS, chrom, SAVE, file="myLEMMAp_SXT_ON.tws";
+plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,hmin=0,hmax=200,title="new start point";
+plot, colour=100, haxis=s, vaxis=hinv, hmin=0, hmax=200, title="new start point";
+plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,dy,title="new start point";
+plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="new start point";
+system, "ps2pdf madx.ps";
+!stop;
+
 ! ! First track start point
 ! system, "rm -f beta*.txt beam0.txt";
 ! assign, echo="betaSTART.txt";
@@ -138,14 +147,28 @@ system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
 system, "rm -f track*";
 !stop;
 !makethin lenses
-select,flag=makethin,class=sbend,thick=false,slice=4;!
+select,flag=makethin,class=sbend,thick=false,slice=5;!
 !select,flag=makethin,class=rbend,thick=false,slice=2;!no rbends
-select,flag=makethin,class=quadrupole,thick=false,slice=2;
-select,flag=makethin,class=sextupole,thick=false,slice=2;
-makethin, sequence=Low_Emit_RING,style=teapot,makedipedge;
+select,flag=makethin,class=quadrupole,thick=false,slice=1;
+select,flag=makethin,class=sextupole,thick=false,slice=1;
+makethin, sequence=Low_Emit_RING,makedipedge=true,style=teapot;
 save, sequence=Low_Emit_RING,file="Low_Emit_RING.thin.seq";
 call, file="Low_Emit_RING.thin.seq";
 use, sequence=Low_Emit_RING;
+select, flag=twiss, clear;
+select, flag=twiss,column=name,keyword,s,l,betx,bety,alfx,alfy,mux,muy,dx,dy,x,
+	dpx,dpy,ddx,ddy,hinv;
+TWISS, chrom, SAVE, file="myLEMMAp_SXT_ON.tws";
+plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,hmin=0,hmax=200,title="slicing";
+plot, colour=100, haxis=s, vaxis=hinv, hmin=0, hmax=200, title="slicing";
+plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,dy,title="slicing";
+plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="slicing";
+system, "ps2pdf madx.ps";
+!EMIT, deltap=0;
+!show, beam;
+
+!stop;
+
 !set parameters
 track, onepass=true,aperture=true,onetable,recloss,dump;
 !call, file="observe.madx";!observe;!set obeservation points
@@ -157,8 +180,36 @@ track, onepass=true,aperture=true,onetable,recloss,dump;
 !start, X=0, PX=0, Y=0, PY=0, T=1e-2, PT=0;
 !start, X=0, PX=0, Y=0, PY=0, T=0, PT=1e-2;
 !start, X=1e-3, PX=5e-4, Y=1e-5, PY=1e-5, T=1e-9, PT=1e-9;
-!start, X=1e-3, PX=1e-3, Y=1e-5, PY=1e-5, T=1e-9, PT=1e-9;
 start, X=0, PX=0, Y=0, PY=0, T=0, PT=0;
+start, X=0, PX=0, Y=0, PY=0, T=0, PT=-1e-2;
+start, X=0, PX=0, Y=0, PY=0, T=0, PT=-2e-2;
+start, X=0, PX=0, Y=0, PY=0, T=0, PT=-3e-2;
+start, X=0, PX=0, Y=0, PY=0, T=0, PT=-4e-2;
+start, X=0, PX=0, Y=0, PY=0, T=0, PT=-5e-2;
+start, X=0, PX=0, Y=0, PY=0, T=0, PT=-6e-2;
+start, X=0, PX=0, Y=0, PY=0, T=0, PT=-7e-2;
+start, X=0, PX=0, Y=0, PY=0, T=0, PT=-8e-2;
+!start, X=0, PX=0, Y=0, PY=0, T=0.010, PT=0;
+!start, X=0, PX=0, Y=0, PY=0, T=0.005, PT=-0.005;
+!start, X=0, PX=0, Y=0, PY=0, T=-0.030, PT=0.0;
+!start, X=0, PX=0, Y=0, PY=0, T=-0.040, PT=0.0;
+!start, X=0, PX=0, Y=0, PY=0, T=-0.050, PT=0.0;
+!start, X=0, PX=0, Y=0, PY=0, T=-67.0e-3, PT=-0.0;
+!start, X=0, PX=0, Y=0, PY=0, T=0, PT=-0.07;
+!start, X=0, PX=0, Y=0, PY=0, T=75.0e-3, PT=-0.01;
+!start, X=0, PX=0, Y=0, PY=0, T=10e-3, PT=-0.015;
+!start, X=0, PX=0, Y=0, PY=0, T=75.0e-3, PT=-0.03;
+!start, X=0, PX=0, Y=0, PY=0, T=75.0e-3, PT=-0.04;
+!start, X=0, PX=0, Y=0, PY=0, T=75.0e-3, PT=-0.05;
+!start, X=0, PX=0, Y=0, PY=0, T=75.0e-3, PT=-0.06;
+! start, X=0, PX=0, Y=0, PY=0, T=-5.0e-3, PT=-0.0;
+! start, X=0, PX=0, Y=0, PY=0, T=-10.0e-3, PT=-0.0;
+! start, X=0, PX=0, Y=0, PY=0, T=-15.0e-3, PT=-0.0;
+! start, X=0, PX=0, Y=0, PY=0, T=-20.0e-3, PT=-0.0;
+! start, X=0, PX=0, Y=0, PY=0, T=-25.0e-3, PT=-0.0;
+! start, X=0, PX=0, Y=0, PY=0, T=-30.0e-3, PT=-0.0;
+! start, X=0, PX=0, Y=0, PY=0, T=-35.0e-3, PT=-0.0;
+! start, X=0, PX=0, Y=0, PY=0, T=-40.0e-3, PT=-0.0;
 call,file="madxInrays.madx";
 run,turns=1,maxaper={Rpipe,AngMax,Rpipe,AngMax,1.0,0.1};!run track
 !dynap;

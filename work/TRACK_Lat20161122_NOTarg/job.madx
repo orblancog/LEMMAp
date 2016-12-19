@@ -22,9 +22,8 @@ use, sequence=Low_Emit_RING, range=#s/#e;
 SXT_ON := 1;
 
 ! The cavity parameters
-RF_ON       := 1;
-!RFc->LAG    := with radiation 0.3839;!without radiation 0.5-0.016;
-RFc->LAG    := 0.378;!without radiation 0.5-0.016;
+RF_ON       := 1.5;! w/o rad 2/3
+RFc->LAG    := 0.426;!w rad n rf=1, 0.378;!w/o rad, 0.5-0.016;
 RFc->FREQ   := 500.117256;
 RFc->HARMON := 10510;
 !show, rfc;
@@ -35,7 +34,7 @@ RFc->HARMON := 10510;
 
 ! Beam pipe
 Rpipe = 50e-3;![m]
-AngMax = 1.0; !maximum angle 1[rad]=
+AngMax = 1.0; !maximum angle 1[rad]
 
 
 ! arcs twiss parameters definition (from last match in mad)
@@ -74,6 +73,7 @@ select, flag=twiss, column= name,keyword,s,l,betx,bety,alfx,alfy,mux,muy,dx,dy,x
 TWISS, chrom, SAVE, file="LEMMAp_SXT_ON.tws";
 !EMIT, deltap=0;
 !show, beam;
+!survey,file="survey";
 system, "rm -f madx.ps";
 plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,hmin=0,hmax=200,title="First ARC Cell";
 plot, colour=100, haxis=s, vaxis=hinv, hmin=0, hmax=200, title="First ARC Cell";
@@ -141,7 +141,7 @@ show, beam;
 assign, echo=terminal;
 !stop;
 ! ! Generating particles(flagname,Nparticles)
-system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
+! system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
 
 ! NO purpose tracking in MAD-X
 system, "rm -f track*";
@@ -210,8 +210,8 @@ start, X=0, PX=0, Y=0, PY=0, T=0, PT=-8e-2;
 ! start, X=0, PX=0, Y=0, PY=0, T=-30.0e-3, PT=-0.0;
 ! start, X=0, PX=0, Y=0, PY=0, T=-35.0e-3, PT=-0.0;
 ! start, X=0, PX=0, Y=0, PY=0, T=-40.0e-3, PT=-0.0;
-call,file="madxInrays.madx";
-run,turns=1,maxaper={Rpipe,AngMax,Rpipe,AngMax,1.0,0.1};!run track
+!call,file="madxInrays.madx";
+run,turns=100,maxaper={Rpipe,AngMax,Rpipe,AngMax,1.0,0.1};!run track
 !dynap;
 endtrack;
 write, table=trackloss, file="trackloss";!write lost particles

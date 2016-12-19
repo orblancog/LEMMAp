@@ -1,0 +1,81 @@
+#!/bin/sh -f
+# This script runs particles 
+
+
+
+echo "HI THERE ! This script runs particles through out"
+echo "  an accelerator with fixed target."
+echo "  authors: oblancog, collamati."
+
+# Number of turns
+: ${ngiri:="100"}
+
+echo "NOW..."
+echo "Checking soft. requirements :"
+echo "  Checking for root ..."
+hash root 2>/dev/null || { echo >&2 "OOOps... I require root but it's not installed.  Aborting."; exit 1; }
+echo "    ... root found"
+echo "  Checking for awk ..."
+hash awk 2>/dev/null || { echo >&2 "OOOps... I require awk but it's not installed.  Aborting."; exit 1; }
+echo "    ... akw found"
+echo "  Checking for madx ..."
+hash madx 2>/dev/null || { echo >&2 "OOOps... I require madx but it's not installed.  Aborting."; exit 1; }
+echo "    ... madx found"
+echo "  Checking for python ..."
+hash python 2>/dev/null || { echo >&2 "OOOps... I require madx but it's not installed.  Aborting."; exit 1; }
+echo "    ... python found"
+echo "ALL SOFTWARE requirements are OK..."
+
+echo "Runing initial twiss..."
+madx < job.twiss.madx | grep -i warning
+echo "Generating initial particle distribution"
+root -l -x -q "GenerateInrays.C(\"START\",1e4)"
+rm madxInrays.madx
+cp trackTABLE trackEND ## turn 0 
+#echo "Translating target output to tracking settings"
+#./gettargetparticles SimTarget-Be001_fort.68
+
+echo "----------------->>>Running particles through lattice !!!"
+echo "----------------->>>            number of turns is "$ngiri
+
+rm -f trackSUMMloss trackSUMMend
+i=1 #current turn
+while [ "$i" -le "$ngiri" ];
+do
+    echo "----------------->>>Runing turn "$i" of "$ngiri
+    echo "  mixing track "$(($i-1))" and look up table"
+    python PythonTOT.py trackEND MC.txt tableaddition \
+ $(awk 'END{print NR}' trackEND 2>&1)\
+ $(awk 'END{print " "NF}' trackEND 2>&1)\
+ $(awk 'END{print " "NR}' MC.txt 2>&1)\
+ $(awk 'END{print " "NF}' MC.txt 2>&1)
+    echo "  changing format to madx track start standards"
+    ./table2madxstart tableaddition    
+    echo "  NOW, track "
+    madx < job.track.madx | grep -i warning
+    if [ "$i" -eq "1" ]
+	then
+	echo "  NOTE: Saving Phase Space at the track start ..."
+	mv betaSTART.txt betaTURN0.txt
+	mv trackSTART trackTURN0
+    fi
+    echo "  getting particles from turn "$i 
+    ./gettrack1turn -v giro="$i" trackEND
+    echo "  getting particle losses from turn "$i 
+    ./getlos1turn -v giro="$i" trackloss
+    rm -f trackloss
+    echo "Turn "$i" of "$ngiri" finished."
+    rm -f tableaddition madxInrays.madx
+    i=$(($i + 1))
+done
+mv betaEND.txt betaSUMMend.txt
+echo "----------------->>>tracking finished"
+echo "----------------->>>after "$(($i-1))" turns"
+echo "Draw Phase Space after tracking ..."
+root -l -x -q "DrawPhaseSpaceAper.C(\"TURN0\")"
+root -l -x -q "DrawPhaseSpaceAper.C(\"SUMMend\")"
+if [ ! -e trackSUMMloss ] ; then
+    touch trackSUMMloss
+fi
+./getlosperturn trackTURN0 trackSUMMloss
+echo "FINALLY DONE. Adios"

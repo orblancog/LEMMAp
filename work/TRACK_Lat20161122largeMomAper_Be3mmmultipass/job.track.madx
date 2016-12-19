@@ -1,0 +1,64 @@
+!! oblancog First twiss 20161123 
+option,echo,info,warn;
+
+! the beam 
+call, file="pbeam.madx";
+! The ring 
+call, file="LERp.thin.seq";
+use, sequence=low_emit_ring;
+! Beam pipe
+call, file="aperture.madx";
+
+! NO purpose tracking in MAD-X
+system, "rm -f trackEND trackSTART";
+!set parameters
+track, onepass=true,aperture=true,onetable,recloss,dump;
+!call, file="observe.madx";!observe;!set observation points
+!set particles
+!start, X=0,PX=0,Y=0,PY=0,T=0,PT=-0.10;
+call,file="madxInrays.madx";
+run,turns=1,maxaper={Rpipe,AngMax,Rpipe,AngMax,1.0,0.1};!run track
+!dynap;
+endtrack;
+write, table=trackloss, file="trackloss";!write lost particles
+! End of NO purpose tracking in MAD-X
+
+! ! beggining track
+! ! NO purpuse tracking in PTC
+! !stop;
+! !set parameters
+! system, "rm -f track*";
+! ptc_create_universe;
+! ptc_create_layout,model=2,method=6,nst=10,
+! !exact;!,
+! resplit,even;
+! !ptc_observe, place="IP.1";
+! !set particles
+! !ptc_start, X=0, PX=0, Y=0, PY=0, T=0, PT=0;
+! !ptc_start, X=1e-3, PX=1e-3, Y=1e-3, PY=1e-3, T=1e-9, PT=1e-9;
+! call, file="madxInrays.madx";
+! !run
+! !ptc_track, icase=6,element_by_element,turns=1,dump,onetable,norm_no=1,file;!,
+! !norm_no is order of the normal form : 1=linear, 2 ...!
+! !ptc_setcavities;
+! !ptc_setswitch,debuglevel=1,maxacceleration=false,totalpath=false,
+! !	radiation=true,fringe=false,time=true,nocavity=false;
+! ptc_track, icase=6,turns=1,dump,onetable,element_by_element,
+! maxaper={Rpipe,AngMax,Rpipe,AngMax,0,0},
+! ! the t and pt vars do not change anything
+! !norm_no=4,
+! file,
+! radiation;
+
+! !ptc_observe,place=#e;
+! !ptc_trackline, turns=1,onetable,file;
+! ptc_track_end;
+! ptc_end;
+! !end of NO purpose tracking in PTC
+
+! split tracking results inf plot friendly files
+system, "./getobservedata trackone";
+system, "mv trackLOW_EMIT_RING\$END trackEND";
+! plot the phase  space
+!system, 'root -x -l -q "DrawPhaseSpace.C(\"START\")" ';
+!system, 'root -x -l -q "DrawPhaseSpace.C(\"END\")" ';

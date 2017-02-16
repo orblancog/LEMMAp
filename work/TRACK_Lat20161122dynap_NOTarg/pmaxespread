@@ -1,0 +1,36 @@
+#! /bin/awk -f
+#  This script identifies which is the surviving particle ID 
+# with the largest possitive and negative offset in energy 
+# e.g. $ ./pmaxspread trackSTART trackEND
+
+BEGIN { 
+    IGNORECASE=1;
+#    print "  reading track files ...";
+    minspread = 0;
+    maxspread = 0;
+    nlines = 0;
+}
+{
+    if(NR==FNR){#trackSTART
+#	print NR;
+	a[$1]=$8;
+	nlines ++;
+	
+    }   
+    if(NR!=FNR){#trackEND
+	b[$1]=$8;
+    }   
+}
+END {
+    for (i=1;i<=nlines;i++){
+#	print a[i]" "b[i];
+	if (a[i] >= maxspread && b[i] != ""){
+	    maxspread = a[i];
+	}
+	if (a[i] <= minspread && b[i] != ""){
+	    minspread = a[i];
+	}
+    }
+    print minspread" "maxspread;
+#    print "  all done. Adios";
+}

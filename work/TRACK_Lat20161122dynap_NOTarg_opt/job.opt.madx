@@ -1,0 +1,102 @@
+!! oblancog First twiss 20161123 
+option,-echo,info,warn;
+
+! the beam  
+E0     := 45.000;![GeV] 
+npar   := 1.9e10;
+emitx  := 5.73e-9;![m]  
+emity  := 5.73e-11;![m]  
+blength:= 3.6e-3;![m] 
+bcur   := 240e-3;![A] 
+nbunch := 100;
+nparpb := 3.1e11;
+espread:= 1e-3;
+beam, PARTICLE=positron, ENERGY=E0,
+      ex=emitx, ey=emity, et=blength*espread,
+      sigt=blength, sige=espread, kbunch=nbunch,
+      NPART=nparpb, bcurrent=bcur, RADIATE=true;
+
+
+! The ring 
+call, file = "Pos_45GeV_Ring_8.mad.madx";
+use, sequence=Low_Emit_RING, range=#s/#e;
+SXT_ON := 1;
+
+! The cavity parameters
+RF_ON       := 1.5;! w/o rad 2/3
+RFc->LAG    := 0.426;!0.426;!w rad n rf=1, 0.378;!w/o rad, 0.5-0.016;
+RFc->FREQ   := 500.117256;
+RFc->HARMON := 10510;
+!stop;
+
+! Beam pipe
+Rpipe = 50e-3;![m]
+AngMax = 1.0; !maximum angle 1[rad]
+
+
+! arcs twiss parameters definition (from last match in mad)
+KSF2 :=   1.95*sxt_on;
+KS1A :=  -2.17*sxt_on;
+KS1B :=  -1.56*sxt_on;
+KS1D :=  -1.56*sxt_on;
+KS1E :=  -2.17*sxt_on;
+KOF1 := -38.5;
+KDF1 := 150.0;
+KDD1 :=   0.0;
+KQD9 :=  -3.502004E-01;
+KQF8 :=   2.355622E-01;
+KQD7 :=  -3.659796E-01;
+KQF6 :=   2.317365E-01;
+KQD5 :=  -2.041680E-01;
+KQF4 :=   1.784162E-01;
+KQD3 :=  -2.234357E-01;
+KQD2 :=  -3.917201E-01;
+KQD1 :=  -3.801510E-01;
+KQF2 :=   2.048242E-01;
+KQF1 :=   1.977323E-01;
+
+! sextupole match result 200 m. 1e-3 resolution e.spread
+! sextupoles match res -0.041, 0.046! 
+ksf2               =               1.55 ;
+ks1a               =              -2.07 ;
+ks1b               =              -1.56 ;
+ks1d               =              -1.56 ;
+ks1e               =              -2.17 ;
+eamin              =             -0.041 ;
+eamax              =              0.046 ;
+! sextupoles match res -0.045, 0.048
+ksf2               =              0.958 ;
+ks1a               =            -1.7868 ;
+ks1b               =            -1.4016 ;
+ks1d               =            -1.3104 ;
+ks1e               =            -2.0452 ;
+
+
+! declaration of the optimization cycle
+eamin :=0;
+eamax :=0;
+match, use_macro;
+  // sextupoles
+  vary, name=KSF2, step=0.1;
+  vary, name=KS1A, step=0.1;
+  vary, name=KS1B, step=0.1;
+  vary, name=KS1D, step=0.1;
+  vary, name=KS1E, step=0.1;
+  myopt : macro ={
+    system, "rm -f matchelements.madx";
+    assign, echo="matchelements.madx";
+    value, KSF2,KS1A,KS1B,KS1D,KS1E;!,eamin,eamax;
+    assign, echo=terminal;
+    system, "./runDynap";
+    system, "./getminmaxEaccept dynap.dat > current_maxEaccept.madx";
+    call, file="current_maxEaccept.madx";
+    assign, echo="match.log";
+    value, KSF2,KS1A,KS1B,KS1D,KS1E,eamin,eamax;
+    assign, echo=terminal;
+    system, 'echo "New value on the match.log file"';
+
+  };
+  constraint, expr=1./eamin=1.;
+  constraint, expr=1./eamax=1.;
+  simplex, calls=200;!,tolerance=1e-7;
+endmatch;

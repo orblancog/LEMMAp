@@ -1,0 +1,8 @@
+#!/bin/awk -f                                                        
+# This script gets the data between two segments of tracking 
+BEGIN{getline;min=$2;max=$3}
+NF{
+    max=(max<$3)?max:$3
+    min=(min<$2)?$2:min
+}
+END{print "eamin="min";eamax=",max";"}

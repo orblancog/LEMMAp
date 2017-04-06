@@ -7,8 +7,9 @@ echo "HI THERE ! This script runs particles through out"
 echo "  an accelerator with fixed target. To get the dynamic apperture"
 echo "  authors: oblancog, collamati."
 
-# Number of turns
+# Number of cycles
 : ${ngiri:="1"}
+: ${nmadxturns:="1"}
 
  echo "NOW..."
 # echo "Checking soft. requirements :"
@@ -37,24 +38,31 @@ echo "  authors: oblancog, collamati."
 
 echo "creating list of positions to check the dynamic aperture"
 #madx < job.twiss.madx | grep -i warning
-#madx < job.twiss.madx > /dev/null 2>&1
+madx < job.twiss.madx > /dev/null 2>&1
 echo "reading the list of positions to check from twiss file"
 slist=($(awk '{if($3 ~ /[0-9]*\.[0-9]/) {print $3;}}' LEMMAp_SXT_ON.tws))
 #exit
 rm -f trackSUMMloss trackSUMMend
 rm -f dynap.dat
+rm -f momacept.dat
 s=0 # starting position
 scount=0
 smax=200
 #echo $(echo $s'<=2' | bc -l )
 #exit
+echo "Setting the number of turns ins madx"
+echo "nmadxturns = "$nmadxturns";" | tee nmadxturns.madx
 while [ $(echo $s'<='$smax | bc -l) -ne 0 ];
 do
     echo ">>>Runing position "$scount" : at s="$s" where smax="$smax
-    i=1 #current turn
+    i=1 #current cycle
+    echo "  Change the cell start point to s="$s
+    rm -f sstart.madx
+    echo "install, element=lowhinv,class=marker,at="$s";" >> sstart.madx
     while [ "$i" -le "$ngiri" ];
     do
-	echo ">>>Runing turn "$i" of "$ngiri
+#	echo "  >>>Runing turn "$i" of "$ngiri
+	echo "  >>>Runing "$nmadxturns" turns "
 #	echo "  mixing track "$(($i-1))" and look up table"
 #	python PythonTOT.py trackEND MC.txt tableaddition \
 #	    $(awk 'END{print NR}' trackEND 2>&1)\
@@ -63,9 +71,6 @@ do
 # $(awk 'END{print " "NF}' MC.txt 2>&1)
 #	echo "  changing format to madx track start standards"
 #	./table2madxstart tableaddition    
-	echo "  Change the cell start point to s="$s
-	rm -f sstart.madx
-	echo "install, element=lowhinv,class=marker,at="$s";" >> sstart.madx
 	echo "  NOW, track "
 	madx < job.madx > /dev/null 2>&1
 #	if [ "$i" -eq "1" ]
@@ -81,8 +86,12 @@ do
 #	rm -f trackloss
 #	echo "Turn "$i" of "$ngiri" finished."
 #	rm -f tableaddition madxInrays.madx
-	echo "  get max spread"
-	echo $s" "$(./pmaxespread trackSTART trackEND) >> dynap.dat
+	echo -n "  get max spread from turn "$nmadxturns" in dynap.dat: "
+	echo $s" "$(./pmaxespread trackSTART trackEND) | tee -a dynap.dat
+	echo -n "  get grid data from turn "$nmadxturns" in momacept.dat: "
+	./momgrid trackSTART trackEND > lastmomacept.dat 
+	awk -v posit="$s" '{print posit" "$1" "$2}' lastmomacept.dat >> momacept.dat
+	echo "" >> momacept.dat
 	i=$(($i + 1))
     done
 #    echo ${slist[$scount]}

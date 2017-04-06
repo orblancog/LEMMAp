@@ -1,0 +1,138 @@
+!! oblancog First twiss 20161123 
+option,echo,info,warn;
+
+! the beam 
+call, file="pbeam.madx";
+
+! The ring 
+call, file="Pos_45GeV_Ring_8.mad.madx";
+use, sequence=Low_Emit_RING, range=#s/#e;
+SXT_ON := 1;
+
+! The cavity parameters
+RF_ON       := 1.5;
+RFc->LAG    := -0.426;
+RFc->FREQ   := 500.117256;
+RFc->HARMON := 10510;
+
+! Beam pipe
+call, file="aperture.madx";
+
+! arcs twiss parameters definition (from last match in mad)
+KSF2 :=   1.95*sxt_on;
+KS1A :=  -2.17*sxt_on;
+KS1B :=  -1.56*sxt_on;
+KS1D :=  -1.56*sxt_on;
+KS1E :=  -2.17*sxt_on;
+KOF1 := -38.5;
+KDF1 := 150.0;
+KDD1 :=   0.0;
+KQD9 :=  -3.502004E-01;
+KQF8 :=   2.355622E-01;
+KQD7 :=  -3.659796E-01;
+KQF6 :=   2.317365E-01;
+KQD5 :=  -2.041680E-01;
+KQF4 :=   1.784162E-01;
+KQD3 :=  -2.234357E-01;
+KQD2 :=  -3.917201E-01;
+KQD1 :=  -3.801510E-01;
+KQF2 :=   2.048242E-01;
+KQF1 :=   1.977323E-01;
+
+! the hinv
+hinv := (1+(table(twiss,alfx))^2)/table(twiss,betx)*table(twiss,dx)^2
+     + 2*table(twiss,alfx)*table(twiss,dx)*table(twiss,dpx)
+     + table(twiss,betx)*table(twiss,dpx)^2;
+
+! ! some plots for comparison of twiss functions
+system, "rm -f *tws";
+! savebeta,label=betaSTART,place=#s;
+! savebeta,label=betaEND,place=#e;
+! select, flag=twiss, clear;
+! select, flag=twiss, column= name,keyword,s,l,betx,bety,alfx,alfy,mux,muy,dx,dy,x,
+! 	dpx,dpy,ddx,ddy,hinv;
+! TWISS, chrom, SAVE, file="LEMMAp_SXT_ON.tws";
+! !EMIT, deltap=0;
+! !show, beam;
+! !survey,file="survey";
+system, "rm -f madx.ps";
+system, "rm -f madx.pdf";
+! plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,hmin=0,hmax=200,title="First ARC Cell";
+! plot, colour=100, haxis=s, vaxis=hinv, hmin=0, hmax=200, title="First ARC Cell";
+! plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,dy,title="Low Emit Ring (LER)";
+! plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="LER";
+! system, "ps2pdf madx.ps";
+! ! End of initial twiss plots and comparison
+! !stop;
+
+! Changing the lattice start point for tracking purposes
+system, "rm -f *seq";
+save, sequence=Low_Emit_RING,file="LERp.seq";
+call, file="LERp.seq";
+use, sequence=Low_Emit_RING;
+seqedit, sequence=Low_Emit_RING;
+flatten;
+! install, element=lowhinv,class=marker,at=0;!drif of some cm
+! install, element=lowhinv,class=marker,at=90.8;!drif of some cm
+! install, element=lowhinv,class=marker,at=145;!drif of some cm
+install, element=lowhinv,class=marker,at=98.24;!drif of some cm
+flatten;
+!endedit;
+!save, sequence=Low_Emit_RING,file="myLow_Emit_RING.seq";
+!call, file="myLow_Emit_RING.seq";
+!stop;
+!use, sequence=Low_Emit_RING;
+!seqedit, sequence=Low_Emit_RING;
+cycle, start=lowhinv;
+flatten;
+endedit;
+!makethin lenses
+use, sequence=Low_Emit_RING;
+! select,flag=makethin,class=sbend,thick=false,slice=5;!
+! !select,flag=makethin,class=rbend,thick=false,slice=2;!no rbends
+! select,flag=makethin,class=quadrupole,thick=false,slice=2;
+! select,flag=makethin,class=sextupole,thick=false,slice=2;
+! makethin, sequence=Low_Emit_RING,style=teapot,makedipedge;
+save, sequence=Low_Emit_RING,file="LERp.track.seq";
+call, file="LERp.track.seq";
+use, sequence=Low_Emit_RING;
+! END of Changing the lattice start point for tracking purposes
+!stop;
+
+! Here I get the beam and twiss params for the part. generation
+! use, sequence=Low_Emit_RING;
+savebeta,label=betalowhinv,place=lowhinv;
+savebeta,label=betaENDlowhinv,place=#e;
+select, flag=twiss, clear;
+select, flag=twiss,column=name,keyword,s,l,betx,bety,alfx,alfy,mux,muy,dx,dy,x,
+	dpx,dpy,ddx,ddy,hinv;
+TWISS, chrom, SAVE, file="modLERp.track.tws";
+! plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,hmin=0,hmax=200,title="new start point";
+! plot, colour=100, haxis=s, vaxis=hinv, hmin=0, hmax=200, title="new start point";
+! plot, colour=100, haxis=s, vaxis1=betx,bety, vaxis2=dx,dy,title="new start point";
+! plot, colour=100, haxis=s, vaxis1=wx,wy, vaxis2=ddx,title="new start point";
+! system, "ps2pdf madx.ps";
+! stop;
+
+! ! First track start point
+! system, "rm -f beta*.txt beam0.txt";
+! assign, echo="betaSTART.txt";
+! show, betaSTART;
+! assign, echo="betaEND.txt";
+! show, betaEND;
+! assign, echo="beam0.txt";
+! show, beam;
+! assign, echo=terminal;
+! New starting point
+system, "rm -f beta*.txt beam0.txt";
+assign, echo="betaSTART.txt";
+show, betalowhinv;
+assign, echo="betaEND.txt";
+show, betaENDlowhinv;
+assign, echo="beam0.txt";
+show, beam;
+assign, echo=terminal;
+!stop;
+! ! Generating particles(flagname,Nparticles)
+!system, 'root -l -x -q "GenerateInrays.C(\"START\",1e4)"';
+stop;

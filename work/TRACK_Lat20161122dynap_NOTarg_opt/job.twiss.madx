@@ -17,9 +17,11 @@ beam, PARTICLE=positron, ENERGY=E0,
       NPART=nparpb, bcurrent=bcur, RADIATE=false;
 
 ! The ring 
-call, file = "Pos_45GeV_Ring_8.mad.madx";
-use, sequence=Low_Emit_RING, range=#s/#e;
-SXT_ON := 0;
+!call, file = "Pos_45GeV_Ring_8.mad.madx";
+!use, sequence=Low_Emit_RING, range=#s/#e;
+!SXT_ON := 0;
+call, file = "LEMMA_MADX.madx";
+use, sequence=LEMMA;
 
 ! The cavity parameters
 RF_ON       := 1;! w/o rad 2/3

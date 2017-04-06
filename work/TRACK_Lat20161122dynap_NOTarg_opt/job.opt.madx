@@ -1,4 +1,4 @@
-!! oblancog First twiss 20161123 
+3!! oblancog First twiss 20161123 
 option,-echo,info,warn;
 
 ! the beam  
@@ -55,6 +55,7 @@ KQD1 :=  -3.801510E-01;
 KQF2 :=   2.048242E-01;
 KQF1 :=   1.977323E-01;
 
+!!!!!! results with madx
 ! ! sextupole match result 200 m. 1e-3 resolution e.spread
 ! sextupoles initial -0.039, 0.04
 ! ksf2               =               1.95 ;
@@ -62,8 +63,8 @@ KQF1 :=   1.977323E-01;
 ! ks1b               =              -1.56 ;
 ! ks1d               =              -1.56 ;
 ! ks1e               =              -2.17 ;
-!eamin              =             -0.039 ;
-!eamax              =               0.04 ;!
+! eamin              =             -0.039 ;
+! eamax              =               0.04 ;!
 ! sextupoles match res -0.041, 0.046! 
 ! ksf2               =               1.55 ;
 ! ks1a               =              -2.07 ;
@@ -72,13 +73,19 @@ KQF1 :=   1.977323E-01;
 ! ks1e               =              -2.17 ;
 ! eamin              =             -0.041 ;
 ! eamax              =              0.046 ;
-! ! sextupoles match res -0.045, 0.048
+! sextupoles match res -0.045, 0.048
 ! ksf2               =              0.958 ;
 ! ks1a               =            -1.7868 ;
 ! ks1b               =            -1.4016 ;
 ! ks1d               =            -1.3104 ;
 ! ks1e               =            -2.0452 ;
-
+! ! sextupoles match res -0.044, 0.048
+! ksf2               =              0.878 ;
+! ks1a               =            -1.0596 ;
+! ks1b               =            -1.1568 ;
+! ks1d               =            -0.4848 ;
+! ks1e               =            -2.0356 ;
+!!!!! results with ptc
 
 ! declaration of the optimization cycle
 eamin :=0;
@@ -104,7 +111,7 @@ match, use_macro;
     system, 'echo "New value on the match.log file"';
 
   };
-  constraint, expr=1./eamin=1.;
+  constraint, expr=1./eamin=-1.;
   constraint, expr=1./eamax=1.;
   simplex, calls=20;!,tolerance=1e-7;
 endmatch;
